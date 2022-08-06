@@ -351,9 +351,11 @@ public class CPU {
 	}
 	
 	public void fetch() {
+		bus.cycles = 0;
 		int opcode = read(PC);
 		currentInstruction = OPCODE_TABLE[opcode/16][opcode%16];
-		System.out.printf("\t(%02X %02X %02X %02X)",read(PC),read(PC+1),read(PC+2),read(PC+3))
+		System.out
+		//.printf("\t(%02X %02X %02X %02X)",read(PC),read(PC+1),read(PC+2),read(PC+3))
 		.printf("\t%s -> %s",Utils.intToHexString(opcode),currentInstruction.toString())
 		.println();
 	}
@@ -438,6 +440,7 @@ public class CPU {
 				System.exit(2);
 				break;
 		}
+		System.out.println("\tCycles: "+bus.cycles);
 	}
 	
 	public int fetchRegisterData(RegisterType r) {
@@ -492,29 +495,32 @@ public class CPU {
 				x=read(PC+1);
 				y=read(PC+2);
 				result=Utils.to16bit(y, x);
+				if(currentInstruction.cond != null) {
+					//Conditional Jump
+					if((currentInstruction.cond == ConditionType.CT_Z) && (((F >> 7) & 0xF)  == 1)) {
+						System.out.println("\tExecuting JP Z,"+String.format("%04X", result));
+						bus.cycles++;
+						PC=result;
+					} else {
+						System.out.println("\tJP $"+String.format("%04X", result)+". " + currentInstruction.cond.toString().substring(3) +" CONDITION NOT MET. SKIPPING TO NEXT INSTRUCTION");
+						PC = PC + currentInstruction.length;
+					}
+				} else {
+					//Non conditional Jump
+					PC = result;
+					bus.cycles++;
+					System.out.println("\tExecuting JP $"+String.format("%04X",result));
+				}
 				break;
 			case AM_R:
 				result=fetchRegisterData(currentInstruction.reg1);
+				PC = result;
+				System.out.println("\tExecuting JP");
 				break;
 			default:
 				System.err.println("\tJP INVALID ADDRESS MODE");
 				System.exit(1);
 		}
-		
-		if(currentInstruction.cond != null) {
-			//Conditional Jump
-			if((currentInstruction.cond == ConditionType.CT_Z) && (((F >> 7) & 0xF)  == 1)) {
-				System.out.println("\tExecuting JP Z,"+String.format("%04X", result));
-				PC=result;
-			} else {
-				System.out.println("\tJP $"+String.format("%04X", result)+". " + currentInstruction.cond.toString().substring(3) +" CONDITION NOT MET. SKIPPING TO NEXT INSTRUCTION");
-				PC = PC + currentInstruction.length;
-			}
-		} else {
-			//Non conditional Jump
-			PC = result;
-			System.out.println("\tExecuting JP $"+String.format("%04X",result));
-		}		
 	};
 	
 	InstructionExecutor iexec_IN_INC = () -> {
@@ -542,6 +548,7 @@ public class CPU {
 					F = flag;
 				} else {
 					result = (x + y) & 0xFFFF;
+					bus.cycles++;
 				}
 				updateRegisterData(currentInstruction.reg1,result);
 				break;
@@ -671,9 +678,10 @@ public class CPU {
 						flag = flag + (F & 0x20);
 					}//h dependent
 					flag = flag + (F & 0x10);//c unchanged				
-					F = flag;
+					F = flag;					
 				} else {
 					result = (x - y) & 0xFFFF;
+					bus.cycles++;
 				}				
 				updateRegisterData(currentInstruction.reg1,result);
 				break;
@@ -694,19 +702,23 @@ public class CPU {
 				if(currentInstruction.cond == null) {					
 					System.out.println("Executing JR "+String.format("%04X", result));
 					PC=result;
+					bus.cycles++;
 					break;
 				} else {
 					if((currentInstruction.cond == ConditionType.CT_NZ) && (((F >> 7) & 0xF)  == 0)) {
 						System.out.println("\tExecuting JR NZ,"+String.format("%04X", result));
 						PC=result;
+						bus.cycles++;
 						break;
 					} else if((currentInstruction.cond == ConditionType.CT_Z) && (((F >> 7) & 0xF)  == 1)) {
 						System.out.println("\tExecuting JR Z,"+String.format("%04X", result));
 						PC=result;
+						bus.cycles++;
 						break;
 					} else if((currentInstruction.cond == ConditionType.CT_NC) && (((F >> 7) & 0xF)  == 0)) {
 						System.out.println("\tExecuting JR NC,"+String.format("%04X", result));
 						PC=result;
+						bus.cycles++;
 						break;
 					} else {
 						System.out.println("\tJR $"+String.format("%04X", result)+". " + currentInstruction.cond.toString().substring(3) +" CONDITION NOT MET. SKIPPING TO NEXT INSTRUCTION");
@@ -806,6 +818,7 @@ public class CPU {
 			write(SP-2,(PC & 0xFF)); //low
 			SP=(SP-2);
 			PC=result;
+			bus.cycles++;
 			System.out.println("\tExecuting CALL $"+String.format("%04X", result));
 		} else {
 			System.err.println("\tCONDITIONAL CALL NOT IMPLEMENTED");
@@ -844,6 +857,7 @@ public class CPU {
 		if(currentInstruction.cond == null) {
 			SP=SP+2;
 			PC = result;
+			bus.cycles++;
 			System.out.println("\tExecuting RET $"+String.format("%04X", result));
 		} else {
 			System.err.println("\tCONDITIONAL RET NOT IMPLEMENTED");
@@ -906,6 +920,7 @@ public class CPU {
 		write(SP-2,(PC & 0xFF)); //low
 		SP=(SP-2);
 		PC=result;
+		bus.cycles++;
 		System.out.println("\tExecuting RST $"+String.format("%04X", result));
 	};
 	
@@ -956,6 +971,7 @@ public class CPU {
 						flag = flag + (F & 0x8);
 					}//c dependent					
 					F = flag;
+					bus.cycles++;
 				}				
 				updateRegisterData(currentInstruction.reg1, result);
 				break;
@@ -1075,6 +1091,7 @@ public class CPU {
 	};
 	
 	InstructionExecutor iexec_IN_PUSH = () -> {
+		bus.cycles++;
 		x=0;y=0;
 		x=fetchRegisterData(currentInstruction.reg1);
 		y=(x & 0xFF00) >> 8; //hi - A,B,D,H

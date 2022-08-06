@@ -1,8 +1,12 @@
 package com.vzl;
 
 public class Bus {
+	int cycles = 0;
+	
 	private CPU cpu;
 	private Cartridge cart;
+	private PPU ppu;
+	
 	private int[] romBank00;
 	private int[] romBank01NN;
 	private int[] vram;
@@ -37,11 +41,16 @@ public class Bus {
 	public void connect(Cartridge cart) {
 		this.cart = cart;
 	}
+	
+	public void connect(PPU ppu) {
+		this.ppu = ppu;
+	}
 
 	//address size - 16 bit(2 byte)
 	//data size - 8 bit(1 byte)
 	
 	public int read(int addr) {
+		cycles++;
 		if(addr>=0x0000 && addr<=0xFFFF) {
 			if(addr>=0x0000 && addr<=0x3FFF) {
 				//return romBank00[addr];
@@ -85,7 +94,13 @@ public class Bus {
 			//FEA0-FEFF	Not Usable
 			
 			if(addr>=0xFF00 && addr<=0xFF7F) {
-				return ioReg[addr - 0xFF00];
+				if(addr == 0xFF40) {
+					return ppu.LCDC;
+				} else if(addr == 0xFF40) {
+					return ppu.STAT;
+				} else {
+					return ioReg[addr - 0xFF00];
+				}
 			}
 			
 			if(addr>=0xFF80 && addr<=0xFFFE) {
@@ -101,6 +116,7 @@ public class Bus {
 	}
 	
 	public void write(int addr, int data) {
+		cycles++;
 		if(addr>=0x0000 && addr<=0xFFFF) {
 			if(addr>=0x0000 && addr<=0x3FFF) {
 				//romBank00[addr] = data;
@@ -140,7 +156,13 @@ public class Bus {
 			//FEA0-FEFF	Not Usable
 			
 			if(addr>=0xFF00 && addr<=0xFF7F) {
-				ioReg[addr - 0xFF00] = data;
+				if(addr == 0xFF40) {
+					ppu.LCDC = data;
+				} else if(addr == 0xFF40) {
+					ppu.STAT = data;
+				} else {
+					ioReg[addr - 0xFF00] = data;
+				}				
 			}
 			
 			if(addr>=0xFF80 && addr<=0xFFFE) {
