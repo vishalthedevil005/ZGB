@@ -6,6 +6,8 @@ import com.vzl.Instruction.InstrType;
 import com.vzl.Instruction.RegisterType;
 
 public class CPU {
+	static final long FREQ = 4194304L;
+	
 	static final Instruction[][] OPCODE_TABLE = {
 		{//0x
 			new Instruction(InstrType.IN_NOP,AddressMode.AM_IMP,null,null,null,1,4,0),											//x0
@@ -34,7 +36,7 @@ public class CPU {
 			new Instruction(InstrType.IN_DEC,AddressMode.AM_R,RegisterType.RT_D,null,null,1,4,0), 								//x5
 			new Instruction(InstrType.IN_LD,AddressMode.AM_R_D8,RegisterType.RT_D,null,null,2,8,0), 							//x6
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x7
-			new Instruction(InstrType.IN_JR,AddressMode.AM_D8,null,null,null,2,12,0), 											//x8
+			new Instruction(InstrType.IN_JR,AddressMode.AM_D8,null,null,ConditionType.CT_NONE,2,12,0), 							//x8
 			new Instruction(InstrType.IN_ADD,AddressMode.AM_R_R,RegisterType.RT_HL,RegisterType.RT_DE,null,1,8,0), 				//x9
 			new Instruction(InstrType.IN_LD,AddressMode.AM_R_MR,RegisterType.RT_A,RegisterType.RT_DE,null,1,8,0), 				//xA
 			new Instruction(InstrType.IN_DEC,AddressMode.AM_R,RegisterType.RT_DE,null,null,1,8,0), 								//xB
@@ -160,14 +162,14 @@ public class CPU {
 			new Instruction(InstrType.IN_ADD,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_L,null,1,4,0), 				//x5
 			new Instruction(InstrType.IN_ADD,AddressMode.AM_R_MR,RegisterType.RT_A,RegisterType.RT_HL,null,1,8,0), 				//x6
 			new Instruction(InstrType.IN_ADD,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_A,null,1,4,0), 				//x7
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x8
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x9
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xA
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xB
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xC
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xD
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xE
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xF
+			new Instruction(InstrType.IN_ADC,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_B,null,1,4,0), 				//x8
+			new Instruction(InstrType.IN_ADC,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_C,null,1,4,0), 				//x9
+			new Instruction(InstrType.IN_ADC,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_D,null,1,4,0), 				//xA
+			new Instruction(InstrType.IN_ADC,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_E,null,1,4,0), 				//xB
+			new Instruction(InstrType.IN_ADC,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_H,null,1,4,0), 				//xC
+			new Instruction(InstrType.IN_ADC,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_L,null,1,4,0), 				//xD
+			new Instruction(InstrType.IN_ADC,AddressMode.AM_R_MR,RegisterType.RT_A,RegisterType.RT_HL,null,1,4,0), 				//xE
+			new Instruction(InstrType.IN_ADC,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_A,null,1,4,0), 				//xF
 		},
 		{//9x
 			new Instruction(InstrType.IN_SUB,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_B,null,1,4,0), 				//x0
@@ -180,12 +182,12 @@ public class CPU {
 			new Instruction(InstrType.IN_SUB,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_A,null,1,4,0), 				//x7
 			new Instruction(InstrType.IN_SBC,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_B,null,1,4,0), 				//x8
 			new Instruction(InstrType.IN_SBC,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_C,null,1,4,0), 				//x9
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xA
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xB
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xC
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xD
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xE
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xF
+			new Instruction(InstrType.IN_SBC,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_D,null,1,4,0), 				//xA
+			new Instruction(InstrType.IN_SBC,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_E,null,1,4,0), 				//xB
+			new Instruction(InstrType.IN_SBC,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_H,null,1,4,0), 				//xC
+			new Instruction(InstrType.IN_SBC,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_L,null,1,4,0), 				//xD
+			new Instruction(InstrType.IN_SBC,AddressMode.AM_R_MR,RegisterType.RT_A,RegisterType.RT_HL,null,1,4,0), 				//xE
+			new Instruction(InstrType.IN_SBC,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_A,null,1,4,0), 				//xF
 		},
 		{//Ax
 			new Instruction(InstrType.IN_AND,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_B,null,1,4,0), 				//x0
@@ -214,30 +216,30 @@ public class CPU {
 			new Instruction(InstrType.IN_OR,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_L,null,1,4,0), 				//x5
 			new Instruction(InstrType.IN_OR,AddressMode.AM_R_MR,RegisterType.RT_A,RegisterType.RT_HL,null,1,8,0), 				//x6
 			new Instruction(InstrType.IN_OR,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_A,null,1,4,0), 				//x7
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x8
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x9
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xA
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xB
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xC
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xD
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xE
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xF
+			new Instruction(InstrType.IN_CP,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_B,null,1,4,0), //x8
+			new Instruction(InstrType.IN_CP,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_C,null,1,4,0), //x9
+			new Instruction(InstrType.IN_CP,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_D,null,1,4,0), //xA
+			new Instruction(InstrType.IN_CP,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_E,null,1,4,0), //xB
+			new Instruction(InstrType.IN_CP,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_H,null,1,4,0), //xC
+			new Instruction(InstrType.IN_CP,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_L,null,1,4,0), //xD
+			new Instruction(InstrType.IN_CP,AddressMode.AM_R_MR,RegisterType.RT_A,RegisterType.RT_HL,null,1,4,0), //xE
+			new Instruction(InstrType.IN_CP,AddressMode.AM_R_R,RegisterType.RT_A,RegisterType.RT_A,null,1,4,0), //xF
 		},
 		{//Cx
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x0
 			new Instruction(InstrType.IN_POP,AddressMode.AM_R,RegisterType.RT_BC,null,null,1,12,0), 							//x1
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x2
-			new Instruction(InstrType.IN_JP,AddressMode.AM_D16,null,null,null,3,16,0), 											//x3
+			new Instruction(InstrType.IN_JP,AddressMode.AM_D16,null,null,ConditionType.CT_NONE,3,16,0), 						//x3
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x4
 			new Instruction(InstrType.IN_PUSH,AddressMode.AM_R,RegisterType.RT_BC,null,null,1,16,0), 							//x5
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x6
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x7
+			new Instruction(InstrType.IN_RST,AddressMode.AM_IMP,null,null,null,1,4,0x00), 										//x7
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x8
-			new Instruction(InstrType.IN_RET,AddressMode.AM_IMP,null,null,null,1,16,0), 										//x9
+			new Instruction(InstrType.IN_RET,AddressMode.AM_IMP,null,null,ConditionType.CT_NONE,1,16,0), 						//x9
 			new Instruction(InstrType.IN_JP,AddressMode.AM_D16,null,null,ConditionType.CT_Z,3,12,0), 							//xA
 			new Instruction(InstrType.IN_CB,AddressMode.AM_IMP,null,null,null,1,4,0), 											//xB
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xC
-			new Instruction(InstrType.IN_CALL,AddressMode.AM_D16,null,null,null,3,24,0), 										//xD
+			new Instruction(InstrType.IN_CALL,AddressMode.AM_D16,null,null,ConditionType.CT_NONE,3,24,0), 						//xD
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xE
 			new Instruction(InstrType.IN_RST,AddressMode.AM_IMP,null,null,null,1,4,0x08), 										//xF
 		},
@@ -249,7 +251,7 @@ public class CPU {
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x4
 			new Instruction(InstrType.IN_PUSH,AddressMode.AM_R,RegisterType.RT_DE,null,null,1,16,0), 							//x5
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x6
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x7
+			new Instruction(InstrType.IN_RST,AddressMode.AM_IMP,null,null,null,1,4,0x10), 										//x7
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x8
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x9
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xA
@@ -267,9 +269,9 @@ public class CPU {
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x4
 			new Instruction(InstrType.IN_PUSH,AddressMode.AM_R,RegisterType.RT_HL,null,null,1,16,0), 							//x5
 			new Instruction(InstrType.IN_AND,AddressMode.AM_R_D8,RegisterType.RT_A,null,null,2,8,0), 							//x6
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x7
+			new Instruction(InstrType.IN_RST,AddressMode.AM_IMP,null,null,null,1,4,0x20), 										//x7
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x8
-			new Instruction(InstrType.IN_JP,AddressMode.AM_R,RegisterType.RT_HL,null,null,1,4,0), 								//x9
+			new Instruction(InstrType.IN_JP,AddressMode.AM_R,RegisterType.RT_HL,null,ConditionType.CT_NONE,1,4,0), 				//x9
 			new Instruction(InstrType.IN_LD,AddressMode.AM_A16_R,RegisterType.RT_A,null,null,3,16,0), 							//xA
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xB
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //xC
@@ -285,7 +287,7 @@ public class CPU {
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x4
 			new Instruction(InstrType.IN_PUSH,AddressMode.AM_R,RegisterType.RT_AF,null,null,1,16,0), 							//x5
 			new Instruction(InstrType.IN_OR,AddressMode.AM_R_D8,RegisterType.RT_A,null,null,2,8,0), 							//x6
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x7
+			new Instruction(InstrType.IN_RST,AddressMode.AM_IMP,null,null,null,1,4,0x30), 										//x7
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x8
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0,0), //x9
 			new Instruction(InstrType.IN_LD,AddressMode.AM_R_A16,RegisterType.RT_A,null,null,3,16,0), 							//xA
@@ -495,10 +497,22 @@ public class CPU {
 				x=read(PC+1);
 				y=read(PC+2);
 				result=Utils.to16bit(y, x);
-				if(currentInstruction.cond != null) {
+				if(currentInstruction.cond != ConditionType.CT_NONE) {
 					//Conditional Jump
 					if((currentInstruction.cond == ConditionType.CT_Z) && (((F >> 7) & 0xF)  == 1)) {
 						System.out.println("\tExecuting JP Z,"+String.format("%04X", result));
+						bus.cycles++;
+						PC=result;
+					} else if((currentInstruction.cond == ConditionType.CT_NZ) && (((F >> 7) & 0xF)  == 0)) {
+						System.out.println("\tExecuting JP NZ,"+String.format("%04X", result));
+						bus.cycles++;
+						PC=result;
+					} else if((currentInstruction.cond == ConditionType.CT_C) && (((F >> 4) & 0xF)  == 1)) {
+						System.out.println("\tExecuting JP C,"+String.format("%04X", result));
+						bus.cycles++;
+						PC=result;
+					} else if((currentInstruction.cond == ConditionType.CT_NC) && (((F >> 4) & 0xF)  == 0)) {
+						System.out.println("\tExecuting JP NC,"+String.format("%04X", result));
 						bus.cycles++;
 						PC=result;
 					} else {
@@ -699,7 +713,7 @@ public class CPU {
 			case AM_D8:
 				sb = (byte) read(PC+1); //signed byte
 				result = PC + sb + currentInstruction.length;
-				if(currentInstruction.cond == null) {					
+				if(currentInstruction.cond == ConditionType.CT_NONE) {					
 					System.out.println("Executing JR "+String.format("%04X", result));
 					PC=result;
 					bus.cycles++;
@@ -715,8 +729,13 @@ public class CPU {
 						PC=result;
 						bus.cycles++;
 						break;
-					} else if((currentInstruction.cond == ConditionType.CT_NC) && (((F >> 7) & 0xF)  == 0)) {
+					} else if((currentInstruction.cond == ConditionType.CT_NC) && (((F >> 4) & 0xF)  == 0)) {
 						System.out.println("\tExecuting JR NC,"+String.format("%04X", result));
+						PC=result;
+						bus.cycles++;
+						break;
+					} else if((currentInstruction.cond == ConditionType.CT_C) && (((F >> 4) & 0xF)  == 1)) {
+						System.out.println("\tExecuting JR C,"+String.format("%04X", result));
 						PC=result;
 						bus.cycles++;
 						break;
@@ -812,7 +831,7 @@ public class CPU {
 		x=read(PC+1);
 		y=read(PC+2);
 		result = Utils.to16bit(y, x);
-		if(currentInstruction.cond == null) {
+		if(currentInstruction.cond == ConditionType.CT_NONE) {
 			PC=PC+currentInstruction.length; //next PC(to be stored in stack)
 			write(SP-1,((PC & 0xFF00) >> 8)); //high
 			write(SP-2,(PC & 0xFF)); //low
@@ -854,7 +873,7 @@ public class CPU {
 		x=read(SP); //low
 		y=read(SP+1);//high
 		result = Utils.to16bit(y, x);
-		if(currentInstruction.cond == null) {
+		if(currentInstruction.cond == ConditionType.CT_NONE) {
 			SP=SP+2;
 			PC = result;
 			bus.cycles++;
@@ -990,6 +1009,45 @@ public class CPU {
 		System.out.println("\tExecuting ADD");
 	};
 	
+	InstructionExecutor iexec_IN_ADC = () -> {
+		x=0;y=0;result=0;
+		switch(currentInstruction.mode) {
+			case AM_R_R:
+				x = fetchRegisterData(currentInstruction.reg1);
+				y = read(fetchRegisterData(currentInstruction.reg2));
+				result = (x + y + ((F & 0x10) >> 4)) & 0xFF;
+				updateRegisterData(currentInstruction.reg1, result);
+				break;
+			default:
+				System.err.println("\tADC INVALID ADDRESS MODE");
+				System.exit(1);
+		}
+		
+		//Update flags
+		if(result==0) {
+			flag = flag + (1 << 7);
+		} else {
+			flag = F & 0x80;
+		}//z dependent
+		//n = 0 (flag = flag + (0 << 6))
+		if((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) {
+			flag = flag + (1 << 5);
+		} else {
+			flag = flag + (F & 0x10);
+		}//h dependent
+		
+		if(result>0xFF) {
+			flag = flag + (1 << 4);
+		} else {
+			flag = flag + (F & 0x8);
+		}//c dependent
+		
+		F = flag;
+		
+		PC = PC + currentInstruction.length;
+		System.out.println("Executing ADC");
+	};
+	
 	InstructionExecutor iexec_IN_SUB = () -> {
 		x=0;y=0;result=0;
 		switch(currentInstruction.mode) {
@@ -1043,9 +1101,8 @@ public class CPU {
 				updateRegisterData(currentInstruction.reg1, result);
 				break;
 			default:
-				System.err.println("Not implemented");
-				System.exit(3);
-				break;
+				System.err.println("\tSUB INVALID ADDRESS MODE");
+				System.exit(1);
 		}
 		
 		//Update flags
