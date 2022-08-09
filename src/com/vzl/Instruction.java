@@ -105,19 +105,17 @@ public class Instruction {
 	RegisterType reg2;
 	ConditionType cond;
 	int length;
-	int clockCycles;	
 	int param;
 	
 	public Instruction(InstrType type, AddressMode mode, 
 			RegisterType reg1, RegisterType reg2, 
-			ConditionType cond, int length, int clockCycles, int param) {
+			ConditionType cond, int length, int param) {
 		this.type = type;
 		this.mode = mode;
 		this.reg1 = reg1;
 		this.reg2 = reg2;
 		this.cond = cond;
-		this.length = length;
-		this.clockCycles = clockCycles;		
+		this.length = length;		
 		this.param = param;
 	}
 	
@@ -125,9 +123,9 @@ public class Instruction {
 	public String toString() {
 		switch(mode) {
 			case AM_IMP:
-				return String.format("%s"+(param!=0?(" "+String.format("%02Xh", param)):""),type.toString().substring(3));
+				return String.format("%s"+(param!=0?(String.format(" %02Xh", param)):"")+((cond!=null && cond!=ConditionType.CT_NONE)?(String.format(" %s", cond.toString().substring(3))):""),type.toString().substring(3));
 			case AM_D16:
-				return String.format("%s u16",type.toString().substring(3));
+				return String.format("%s "+((cond!=null && cond!=ConditionType.CT_NONE)?(String.format("%s,", cond.toString().substring(3))):"")+"u16",type.toString().substring(3));
 			case AM_R:
 				return String.format("%s %s",type.toString().substring(3),reg1.toString().substring(3));
 			case AM_MR:
@@ -143,7 +141,7 @@ public class Instruction {
 			case AM_R_D8:
 				return String.format("%s %s,u8",type.toString().substring(3),reg1.toString().substring(3));
 			case AM_D8:
-				return String.format("%s i8",type.toString().substring(3));
+				return String.format("%s "+((cond!=null && cond!=ConditionType.CT_NONE)?(String.format("%s,", cond.toString().substring(3))):"")+"i8",type.toString().substring(3));
 			case AM_A8_R:
 				return String.format("%s ($FF00+u8),%s",type.toString().substring(3),reg1.toString().substring(3));
 			case AM_R_A8:
