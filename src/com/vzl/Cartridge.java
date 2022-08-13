@@ -5,10 +5,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Cartridge {
+	private int[] romBank00;
+	private int[] romBankNN;
+	private int[][] ramBank;
+	
+	private byte bankMode;
+	private int romBankNum = 0;
+	private byte ramBankNum = 0;
+	private boolean ramAccessFlag;
+	
 	private static final Map<Integer, String> CART_TYPE = new HashMap<Integer, String>();
     static {
     	CART_TYPE.put(0x00, "ROM ONLY");
@@ -127,7 +137,12 @@ public class Cartridge {
 	
 	public Cartridge() {
 		ch = new CartridgeHeader();
-		//romData = new int[32 * 1024];
+		
+		romBank00 =  new int[16 * 1024];	//fixed
+		romBankNN =  new int[16 * 1024]; 	//switchable
+		ramBank =  new int[4][8 * 1024]; 	//switchable
+		
+		ramAccessFlag = false;
 	}
 	
 	public void loadCart(File f) {		
@@ -160,6 +175,8 @@ public class Cartridge {
 			x = x - (romData[i] & 0xFF) - 1;
 		}
 		System.out.printf("\t Checksum : %02X (%s)", ch.headerChecksum, (romData[0x014D] == (x & 0xFF)) ? "PASSED" : "FAILED").println();
+		
+		initializeMemory();
 	}
 	
 	public void parseCartridgeHeader() {
@@ -192,7 +209,7 @@ public class Cartridge {
 		System.out.println("Cartridge Loaded:");
 		System.out.printf("\t Title    : %s", ch.title).println();
 		System.out.printf("\t Type     : %02X (%s)", ch.cartridgeType, getCartTypeName()).println();
-		System.out.printf("\t ROM Size : %02X (%d KB)", ch.romSize,32 << ch.romSize).println();
+		System.out.printf("\t ROM Size : %02X (%d KB)", ch.romSize, getROMSize()).println();
 		System.out.printf("\t RAM Size : %02X (%d KB)", ch.ramSize, getRAMSize()).println();
 		System.out.printf("\t LIC Code : %s (%s)", getLicCode(), getLicName()).println();
 		System.out.printf("\t ROM Vers : %02X", ch.maskRomVerNum).println();
@@ -218,6 +235,10 @@ public class Cartridge {
 		return String.format("%02X",ch.oldLicenseeCode);		
 	}
 	
+	int getROMSize() {
+		return 32 << ch.romSize;
+	}
+	
 	int getRAMSize() {
 		switch(ch.ramSize) {
 			case 0x00: return 0;
@@ -230,11 +251,81 @@ public class Cartridge {
 		}
 	}
 	
+	public void initializeMemory() {
+		romBank00 = Arrays.copyOfRange(romData, 0x0000, 0x3FFF);
+		romBankNN = Arrays.copyOfRange(romData, 0x4000, 0x7FFF);
+	}
+	
+	public void switchROMBank(int bankNum) {
+		int start = 0x4000;
+		int end = 0x7FFF;
+		if((bankNum == 0x00) || (bankNum == 0x01)) {
+			romBankNN = Arrays.copyOfRange(romData, start, end);
+		} else {
+			romBankNN = Arrays.copyOfRange(romData, start + ((bankNum - 1) * 0x4000), end + ((bankNum - 1) * 0x4000));
+		}
+	}
+	
+	public void switchRAMBank(int bankNum) {
+		ramBankNum = (byte) (bankNum & 0xF);
+	}
+	
 	public int read(int addr) {
-		return romData[addr];
+		//return romData[addr];
+		if(addr>=0x0000 && addr<=0x3FFF) {
+			return romBank00[addr];
+		}
+		
+		if(addr>=0x4000 && addr<=0x7FFF) {
+			return romBankNN[addr - 0x4000];
+		}
+		
+		if(addr>=0xA000 && addr<=0xBFFF) {
+			return ramAccessFlag ? ramBank[ramBankNum][addr - 0xA000] : 0xFF;
+		}
+		
+		return 0xFF;
 	}
 	
 	public void write(int addr,int data) {
-		romData[addr] = data;
+		//romData[addr] = data;
+		
+		//0000-1FFF - RAM enable
+		if(addr>=0x0000 && addr<=0x1FFF) {
+			//Enable RAM
+			if((data & 0xF) == 0xA) {
+				ramAccessFlag = true;
+			}
+			//Disable RAM
+			if((data & 0xF) == 0x0) {
+				ramAccessFlag = false;
+			}
+		}
+		
+		if(addr>=0x2000 && addr<=0x3FFF) {
+			romBankNum = (data & 0x1F); //only first 5 bits
+			switchROMBank(romBankNum);
+		}
+		
+		if(addr>=0x4000 && addr<=0x5FFF) {
+			if(bankMode == 0x01) {
+				switchRAMBank(data);
+			}
+			
+			if(bankMode == 0x00) {
+				romBankNum = ((data << 5) & 0xFF) + romBankNum;
+				switchROMBank(romBankNum);
+			}
+		}
+		
+		if(addr>=0x6000 && addr<=0x7FFF) {
+			bankMode = (byte) (data & 0xF);
+		}
+		
+		if(addr>=0xA000 && addr<=0xBFFF) {
+			if(ramAccessFlag) {
+				ramBank[ramBankNum][addr - 0xA000] = data;			
+			}			
+		}
 	}
 }

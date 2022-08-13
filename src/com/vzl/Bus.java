@@ -7,8 +7,6 @@ public class Bus {
 	private Cartridge cart;
 	private PPU ppu;
 	
-	private int[] romBank00;
-	private int[] romBank01NN;
 	private int[] vram;
 	private int[] ramExt;
 	private int[] ram1;
@@ -18,9 +16,7 @@ public class Bus {
 	private int[] hram;
 	private int ieReg;
 
-	public Bus() {		
-		romBank00 = new int[16 * 1024]; // 16 KiB ROM bank 00. From cartridge, usually a fixed bank
-		romBank01NN = new int[16 * 1024]; //16 KiB ROM Bank 01~NN. From cartridge, switchable bank via mapper (if any)		
+	public Bus() {	
 		vram = new int[8 * 1024]; // 8 KB VRAM. In CGB mode, switchable bank 0/1
 		ramExt = new int[8 * 1024]; // 8 KB External RAM. From cartridge, switchable bank if any
 		
@@ -67,7 +63,10 @@ public class Bus {
 			}
 			
 			if(addr>=0xA000 && addr<=0xBFFF) {
-				return ramExt[addr - 0xA000];
+				//return ramExt[addr - 0xA000];
+				//return cart.read(addr);
+				System.out.printf("UNSUPPORTED CART RAM READ at address $%04X", addr).println();
+				System.exit(4);
 			}
 			
 			if(addr>=0xC000 && addr<=0xCFFF) {
@@ -121,11 +120,15 @@ public class Bus {
 			if(addr>=0x0000 && addr<=0x3FFF) {
 				//romBank00[addr] = data;
 				cart.write(addr, data);
+//				System.out.printf("UNSUPPORTED CART ROM WRITE at address $%04X with data $%02X", addr, data).println();
+//				System.exit(4);
 			}
 			
 			if(addr>=0x4000 && addr<=0x7FFF) {
 				//romBank01NN[addr - 0x4000] = data;
 				cart.write(addr, data);
+//				System.out.printf("UNSUPPORTED CART ROM WRITE at address $%04X with data $%02X", addr, data).println();
+//				System.exit(4);
 			}
 			
 			if(addr>=0x8000 && addr<=0x9FFF) {
@@ -133,7 +136,10 @@ public class Bus {
 			}
 			
 			if(addr>=0xA000 && addr<=0xBFFF) {
-				ramExt[addr - 0xA000] = data;
+				//ramExt[addr - 0xA000] = data;
+				//cart.write(addr, data);
+				System.out.printf("UNSUPPORTED CART RAM WRITE at address $%04X with data $%02X", addr, data).println();
+				System.exit(4);
 			}
 			
 			if(addr>=0xC000 && addr<=0xCFFF) {
