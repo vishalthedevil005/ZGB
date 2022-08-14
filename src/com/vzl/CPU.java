@@ -230,9 +230,9 @@ public class CPU {
 			new Instruction(InstrType.IN_POP,AddressMode.AM_R,RegisterType.RT_BC,null,null,1,0), 							//x1
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0), //x2
 			new Instruction(InstrType.IN_JP,AddressMode.AM_D16,null,null,ConditionType.CT_NONE,3,0), 						//x3
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0), //x4
+			new Instruction(InstrType.IN_CALL,AddressMode.AM_D16,null,null,ConditionType.CT_NZ,3,0), 						//x4
 			new Instruction(InstrType.IN_PUSH,AddressMode.AM_R,RegisterType.RT_BC,null,null,1,0), 							//x5
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0), //x6
+			new Instruction(InstrType.IN_ADD,AddressMode.AM_R_D8,RegisterType.RT_A,null,null,2,0), 							//x6
 			new Instruction(InstrType.IN_RST,AddressMode.AM_IMP,null,null,null,1,0x00), 									//x7
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0), //x8
 			new Instruction(InstrType.IN_RET,AddressMode.AM_IMP,null,null,ConditionType.CT_NONE,1,0), 						//x9
@@ -250,7 +250,7 @@ public class CPU {
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0), //x3
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0), //x4
 			new Instruction(InstrType.IN_PUSH,AddressMode.AM_R,RegisterType.RT_DE,null,null,1,0), 							//x5
-			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0), //x6
+			new Instruction(InstrType.IN_SUB,AddressMode.AM_R_D8,RegisterType.RT_A,null,null,2,0), 							//x6
 			new Instruction(InstrType.IN_RST,AddressMode.AM_IMP,null,null,null,1,0x10), 									//x7
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0), //x8
 			new Instruction(InstrType.IN_NONE,AddressMode.AM_IMP,null,null,null,0,0), //x9
@@ -840,8 +840,42 @@ public class CPU {
 			bus.cycles++;
 			System.out.println("\tExecuting CALL $"+String.format("%04X", result));
 		} else {
-			System.err.println("\tCONDITIONAL CALL NOT IMPLEMENTED");
-			System.exit(1);
+			if((currentInstruction.cond == ConditionType.CT_NZ) && (((F >> 7) & 0xF)  == 0)) {
+				PC=PC+currentInstruction.length; //next PC(to be stored in stack)
+				write(SP-1,((PC & 0xFF00) >> 8)); //high
+				write(SP-2,(PC & 0xFF)); //low
+				SP=(SP-2);
+				PC=result;
+				bus.cycles++;
+				System.out.println("\tExecuting CALL NZ,"+String.format("%04X", result));
+			} else if((currentInstruction.cond == ConditionType.CT_Z) && (((F >> 7) & 0xF)  == 1)) {
+				PC=PC+currentInstruction.length; //next PC(to be stored in stack)
+				write(SP-1,((PC & 0xFF00) >> 8)); //high
+				write(SP-2,(PC & 0xFF)); //low
+				SP=(SP-2);
+				PC=result;
+				bus.cycles++;
+				System.out.println("\tExecuting CALL Z,"+String.format("%04X", result));
+			} else if((currentInstruction.cond == ConditionType.CT_NC) && (((F >> 4) & 0xF)  == 0)) {
+				PC=PC+currentInstruction.length; //next PC(to be stored in stack)
+				write(SP-1,((PC & 0xFF00) >> 8)); //high
+				write(SP-2,(PC & 0xFF)); //low
+				SP=(SP-2);
+				PC=result;
+				bus.cycles++;
+				System.out.println("\tExecuting CALL NC,"+String.format("%04X", result));
+			}else if((currentInstruction.cond == ConditionType.CT_C) && (((F >> 4) & 0xF)  == 1)) {
+				PC=PC+currentInstruction.length; //next PC(to be stored in stack)
+				write(SP-1,((PC & 0xFF00) >> 8)); //high
+				write(SP-2,(PC & 0xFF)); //low
+				SP=(SP-2);
+				PC=result;
+				bus.cycles++;
+				System.out.println("\tExecuting CALL C,"+String.format("%04X", result));
+			} else {
+				System.out.println("\tCALL $"+String.format("%04X", result)+". " + currentInstruction.cond.toString().substring(3) +" CONDITION NOT MET. SKIPPING TO NEXT INSTRUCTION");
+				PC = PC + currentInstruction.length;
+			}
 		}		
 	};
 	
@@ -999,6 +1033,48 @@ public class CPU {
 				y = read(fetchRegisterData(currentInstruction.reg2));
 				result = (x + y) & 0xFF;
 				updateRegisterData(currentInstruction.reg1, result);
+				//Update flags
+				if(result==0) {
+					flag = flag + (1 << 7);
+				} else {
+					flag = F & 0x80;
+				}//z dependent
+				//n = 0 (flag = flag + (0 << 6))
+				if((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) {
+					flag = flag + (1 << 5);
+				} else {
+					flag = flag + (F & 0x10);
+				}//h dependent				
+				if(result>0xFF) {
+					flag = flag + (1 << 4);
+				} else {
+					flag = flag + (F & 0x8);
+				}//c dependent				
+				F = flag;
+				break;
+			case AM_R_D8:
+				x = fetchRegisterData(currentInstruction.reg1);
+				y = read(PC+1);
+				result = (x + y) & 0xFF;
+				updateRegisterData(currentInstruction.reg1, result);
+				//Update flags
+				if(result==0) {
+					flag = flag + (1 << 7);
+				} else {
+					flag = F & 0x80;
+				}//z dependent
+				//n = 0 (flag = flag + (0 << 6))
+				if((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) {
+					flag = flag + (1 << 5);
+				} else {
+					flag = flag + (F & 0x10);
+				}//h dependent				
+				if(result>0xFF) {
+					flag = flag + (1 << 4);
+				} else {
+					flag = flag + (F & 0x8);
+				}//c dependent				
+				F = flag;				
 				break;
 			default:
 				System.err.println("\tADD INVALID ADDRESS MODE");
@@ -1062,6 +1138,12 @@ public class CPU {
 				y = read(fetchRegisterData(currentInstruction.reg2));
 				result = (x - y) & 0xFF;
 				updateRegisterData(currentInstruction.reg1, result);
+				break;
+			case AM_R_D8:
+				x = fetchRegisterData(currentInstruction.reg1);
+				y = read(PC+1);
+				result = (x - y) & 0xFF;
+				updateRegisterData(currentInstruction.reg1, result);				
 				break;
 			default:
 				System.err.println("Not implemented");
@@ -1172,7 +1254,6 @@ public class CPU {
 	InstructionExecutor iexec_IN_CB = () -> {
 		PC = PC + currentInstruction.length;
 		fetchCBInstruction();
-		executeCBInstruction();
 	};
 	
 	static final Instruction[][] CB_OPCODE_TABLE = {
