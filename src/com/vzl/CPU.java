@@ -567,18 +567,13 @@ public class CPU {
 						|| currentInstruction.reg1.toString()=="RT_SP")) {
 					result = (x + y) & 0xFF;
 					if(result==0) {
-						flag = flag + (1 << 7);
-					} else {
-						//flag = F & 0x80;
-						flag = 0;
+						flag = flag | (1 << 7);
 					}//z dependent
-					//n = 0	(flag = flag + (0 << 6))
+					//n = 0	(flag = flag | (0 << 6))
 					if((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) {
-						flag = flag + (1 << 5);
-					} else {
-						flag = flag + (F & 0x20);
+						flag = flag | (1 << 5);
 					}//h dependent
-					flag = flag + (F & 0x10);//c unchanged			
+					flag = flag | (F & 0x10);//c unchanged			
 					F = flag;
 				} else {
 					result = (x + y) & 0xFFFF;
@@ -608,9 +603,7 @@ public class CPU {
 				System.exit(1);
 		}
 		if(result==0) {
-			flag = 1<<7;
-		} else {
-			flag = F & 0x80;
+			flag = flag | (1 << 7);
 		}//z dependent, n=0,h=0,c=0		
 		F = flag;
 		PC = PC + currentInstruction.length;
@@ -696,7 +689,7 @@ public class CPU {
 	};
 	
 	InstructionExecutor iexec_IN_DEC = () -> {
-		x=0;y=1;result=0;
+		x=0;y=1;flag=0;result=0;
 		switch(currentInstruction.mode) {
 			case AM_R:
 				x = fetchRegisterData(currentInstruction.reg1);
@@ -706,18 +699,13 @@ public class CPU {
 						|| currentInstruction.reg1.toString()=="RT_SP")) {
 					result = (x - y) & 0xFF;
 					if(result==0) {
-						flag = flag + (1 << 7);
-					} else {
-						//flag = (F & 0x80);
-						flag = 0;
+						flag = flag | (1 << 7);
 					}//z dependent
-					flag = flag + (1 << 6);//n=1
+					flag = flag | (1 << 6);//n=1
 					if(((x & 0xF) - (y & 0xF)) < 0) {
-						flag = flag + (1 << 5);
-					} else {
-						flag = flag + (F & 0x20);
+						flag = flag | (1 << 5);
 					}//h dependent
-					flag = flag + (F & 0x10);//c unchanged				
+					flag = flag | (F & 0x10);//c unchanged				
 					F = flag;					
 				} else {
 					result = (x - y) & 0xFFFF;
@@ -831,20 +819,14 @@ public class CPU {
 		}
 		
 		if(result==0) {
-			flag = flag + (1 << 7);
-		} else {
-			flag = F & 0x80;
+			flag = flag | (1 << 7);
 		}//z dependent
-		flag = flag + (1 << 6);//n=1
+		flag = flag | (1 << 6);//n=1
 		if(((x & 0xF) - (y & 0xF)) < 0) {
-			flag = flag + (1 << 5);
-		} else {
-			flag = flag + (F & 0x20);
+			flag = flag | (1 << 5);
 		}//h dependent
 		if(x < y) {
-			flag = flag + (1 << 4);
-		} else {
-			flag = flag + (F & 0x10);
+			flag = flag | (1 << 4);
 		}//c dependent				
 		F = flag;
 		
@@ -925,9 +907,7 @@ public class CPU {
 				System.exit(1);
 		}
 		if(result==0) {
-			flag = 1<<7;
-		} else {
-			flag = F & 0x80;
+			flag = flag | (1 << 7);
 		}//z dependent,n=0,h=0,c=0
 		F = flag;
 		PC = PC + currentInstruction.length;
@@ -978,7 +958,7 @@ public class CPU {
 		updateRegisterData(currentInstruction.reg1, ((~x) & 0xFF));
 		PC = PC + currentInstruction.length;
 		
-		flag = (F & 0x80) + (1 << 6) + (1 << 5) + (F & 0x10); //z unchanged, n=1, h=1 and c unchanged
+		flag = (F & 0x80) | (1 << 6) | (1 << 5) | (F & 0x10); //z unchanged, n=1, h=1 and c unchanged
 		F = flag;
 		
 		System.out.println("\tExecuting CPL");
@@ -1004,12 +984,11 @@ public class CPU {
 				System.exit(1);
 		}
 		if(result==0) {
-			flag = 1<<7;	
-		} else {
-			flag = F & 0x80;
-		}//z dependent,n=0
-		flag = flag + (1 << 5); //h=1
-		//c=0 (flag = flag + (0 << 4))
+			flag = flag | (1 << 7);
+		}//z dependent
+		//n=0 (flag = flag | (0 << 6))
+		flag = flag | (1 << 5); //h=1
+		//c=0 (flag = flag | (0 << 4))
 		F = flag;
 		
 		PC = PC + currentInstruction.length;
@@ -1044,21 +1023,14 @@ public class CPU {
 					result = (x + y) & 0xFF;
 					//Update flags
 					if(result==0) {
-						flag = flag + (1 << 7);
-					} else {
-						flag = F & 0x80;
+						flag = flag | (1 << 7);
 					}//z dependent
 					//n = 0 (flag = flag + (0 << 6))
 					if((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) {
-						flag = flag + (1 << 5);
-					} else {
-						flag = flag + (F & 0x10);
-					}//h dependent
-					
+						flag = flag | (1 << 5);
+					}//h dependent					
 					if(result>0xFF) {
-						flag = flag + (1 << 4);
-					} else {
-						flag = flag + (F & 0x8);
+						flag = flag | (1 << 4);
 					}//c dependent
 					
 					F = flag;
@@ -1066,16 +1038,12 @@ public class CPU {
 					result = (x + y) & 0xFFFF;
 					//Update flags
 					flag = F & 0x80;//z unchanged
-					//n = 0 (flag = flag + (0 << 6))
+					//n = 0 (flag = flag | (0 << 6))
 					if((((x & 0xFFF) + (y & 0xFFF)) & 0x100) == 0x100) {
-						flag = flag + (1 << 5);
-					} else {
-						flag = flag + (F & 0x10);
+						flag = flag | (1 << 5);
 					}//h dependent					
 					if(result>0xFFFF) {
-						flag = flag + (1 << 4);
-					} else {
-						flag = flag + (F & 0x8);
+						flag = flag | (1 << 4);
 					}//c dependent					
 					F = flag;
 					bus.cycles++;
@@ -1089,20 +1057,14 @@ public class CPU {
 				updateRegisterData(currentInstruction.reg1, result);
 				//Update flags
 				if(result==0) {
-					flag = flag + (1 << 7);
-				} else {
-					flag = F & 0x80;
+					flag = flag | (1 << 7);
 				}//z dependent
-				//n = 0 (flag = flag + (0 << 6))
+				//n = 0 (flag = flag | (0 << 6))
 				if((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) {
-					flag = flag + (1 << 5);
-				} else {
-					flag = flag + (F & 0x10);
+					flag = flag | (1 << 5);
 				}//h dependent				
 				if(result>0xFF) {
-					flag = flag + (1 << 4);
-				} else {
-					flag = flag + (F & 0x8);
+					flag = flag | (1 << 4);
 				}//c dependent				
 				F = flag;
 				break;
@@ -1113,20 +1075,14 @@ public class CPU {
 				updateRegisterData(currentInstruction.reg1, result);
 				//Update flags
 				if(result==0) {
-					flag = flag + (1 << 7);
-				} else {
-					flag = F & 0x80;
+					flag = flag | (1 << 7);
 				}//z dependent
-				//n = 0 (flag = flag + (0 << 6))
+				//n = 0 (flag = flag | (0 << 6))
 				if((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) {
-					flag = flag + (1 << 5);
-				} else {
-					flag = flag + (F & 0x10);
+					flag = flag | (1 << 5);
 				}//h dependent				
 				if(result>0xFF) {
-					flag = flag + (1 << 4);
-				} else {
-					flag = flag + (F & 0x8);
+					flag = flag | (1 << 4);
 				}//c dependent				
 				F = flag;				
 				break;
@@ -1140,7 +1096,7 @@ public class CPU {
 	};
 	
 	InstructionExecutor iexec_IN_ADC = () -> {
-		x=0;y=0;result=0;
+		x=0;y=0;flag=0;result=0;
 		switch(currentInstruction.mode) {
 			case AM_R_R:
 				x = fetchRegisterData(currentInstruction.reg1);
@@ -1167,23 +1123,15 @@ public class CPU {
 		
 		//Update flags
 		if(result==0) {
-			flag = flag + (1 << 7);
-		} else {
-			flag = F & 0x80;
+			flag = flag | (1 << 7);
 		}//z dependent
-		//n = 0 (flag = flag + (0 << 6))
+		//n = 0 (flag = flag | (0 << 6))
 		if((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) {
-			flag = flag + (1 << 5);
-		} else {
-			flag = flag + (F & 0x10);
-		}//h dependent
-		
+			flag = flag | (1 << 5);
+		}//h dependent		
 		if(result>0xFF) {
-			flag = flag + (1 << 4);
-		} else {
-			flag = flag + (F & 0x8);
-		}//c dependent
-		
+			flag = flag | (1 << 4);
+		}//c dependent		
 		F = flag;
 		
 		PC = PC + currentInstruction.length;
@@ -1191,7 +1139,7 @@ public class CPU {
 	};
 	
 	InstructionExecutor iexec_IN_SUB = () -> {
-		x=0;y=0;result=0;
+		x=0;y=0;flag=0;result=0;
 		switch(currentInstruction.mode) {
 			case AM_R_R:
 				x = fetchRegisterData(currentInstruction.reg1);
@@ -1218,20 +1166,14 @@ public class CPU {
 		}
 		//Update flags
 		if(result==0) {
-			flag = flag + (1 << 7);
-		} else {
-			flag = F & 0x80;
+			flag = flag | (1 << 7);
 		}//z dependent						
-		flag = flag + (1 << 6);//n=1						
+		flag = flag | (1 << 6);//n=1						
 		if((x & 0xF) < (y & 0xF)) {
-			flag = flag + (1 << 5);
-		} else {
-			flag = F & 0x20;
+			flag = flag | (1 << 5);
 		}//h dependent						
 		if(x < y) {
-			flag = flag + (1 << 4);
-		} else {
-			flag = F & 0x10;
+			flag = flag | (1 << 4);
 		}//c dependent						
 		F = flag;
 		
@@ -1240,7 +1182,7 @@ public class CPU {
 	};
 	
 	InstructionExecutor iexec_IN_SBC = () -> {
-		x=0;y=0;result=0;
+		x=0;y=0;flag=0;result=0;
 		switch(currentInstruction.mode) {
 			case AM_R_R:
 				x = fetchRegisterData(currentInstruction.reg1);
@@ -1267,20 +1209,14 @@ public class CPU {
 		
 		//Update flags
 		if(result==0) {
-			flag = flag + (1 << 7);
-		} else {
-			flag = F & 0x80;
+			flag = flag | (1 << 7);
 		}//z dependent						
 		flag = flag + (1 << 6);//n=1						
 		if((x & 0xF) < (y & 0xF)) {
-			flag = flag + (1 << 5);
-		} else {
-			flag = F & 0x20;
+			flag = flag | (1 << 5);
 		}//h dependent						
 		if(x < y) {
-			flag = flag + (1 << 4);
-		} else {
-			flag = F & 0x10;
+			flag = flag | (1 << 4);
 		}//c dependent						
 		F = flag;
 		
@@ -1705,9 +1641,7 @@ public class CPU {
 		}
 		
 		if(result==0) {
-			flag = 1 << 7;
-		} else {
-			flag = F & 0x80;
+			flag = flag | (1 << 7);
 		}// z dependent, n=0, h=0, c=0
 		F = flag;
 		
