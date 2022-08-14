@@ -252,13 +252,13 @@ public class Cartridge {
 	}
 	
 	public void initializeMemory() {
-		romBank00 = Arrays.copyOfRange(romData, 0x0000, 0x3FFF);
-		romBankNN = Arrays.copyOfRange(romData, 0x4000, 0x7FFF);
+		romBank00 = Arrays.copyOfRange(romData, 0x0000, 0x4000);
+		romBankNN = Arrays.copyOfRange(romData, 0x4000, 0x8000);
 	}
 	
 	public void switchROMBank(int bankNum) {
 		int start = 0x4000;
-		int end = 0x7FFF;
+		int end = 0x8000;
 		if((bankNum == 0x00) || (bankNum == 0x01)) {
 			romBankNN = Arrays.copyOfRange(romData, start, end);
 		} else {
@@ -313,8 +313,10 @@ public class Cartridge {
 			}
 			
 			if(bankMode == 0x00) {
-				romBankNum = ((data << 5) & 0xFF) + romBankNum;
-				switchROMBank(romBankNum);
+				if(ch.romSize > 0x04) {
+					romBankNum = ((data << 5) & 0xFF) + romBankNum;
+					switchROMBank(romBankNum);
+				}
 			}
 		}
 		

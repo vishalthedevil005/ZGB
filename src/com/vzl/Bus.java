@@ -1,6 +1,8 @@
 package com.vzl;
 
 public class Bus {
+	String test1 = "";
+	String test2 = "";
 	int cycles = 0;
 	
 	private CPU cpu;
@@ -120,6 +122,7 @@ public class Bus {
 			if(addr>=0x0000 && addr<=0x3FFF) {
 				//romBank00[addr] = data;
 				cart.write(addr, data);
+				return;
 //				System.out.printf("UNSUPPORTED CART ROM WRITE at address $%04X with data $%02X", addr, data).println();
 //				System.exit(4);
 			}
@@ -127,12 +130,14 @@ public class Bus {
 			if(addr>=0x4000 && addr<=0x7FFF) {
 				//romBank01NN[addr - 0x4000] = data;
 				cart.write(addr, data);
+				return;
 //				System.out.printf("UNSUPPORTED CART ROM WRITE at address $%04X with data $%02X", addr, data).println();
 //				System.exit(4);
 			}
 			
 			if(addr>=0x8000 && addr<=0x9FFF) {
 				vram[addr - 0x8000] = data;
+				return;
 			}
 			
 			if(addr>=0xA000 && addr<=0xBFFF) {
@@ -143,40 +148,72 @@ public class Bus {
 			}
 			
 			if(addr>=0xC000 && addr<=0xCFFF) {
-				ram1[addr - 0xC000] = data;
+				if(addr>=0xC000 && addr<=0xCC5D) {
+					ram1[addr - 0xC000] = data;
+				} else {
+					ram1[addr - 0xC000] = data;
+				}
+											
+				return;
 			}
 			
 			if(addr>=0xD000 && addr<=0xDFFF) {
 				ram2[addr - 0xD000] = data;
+				return;
 			}
 			
 			//Address range E000-FDFF is same as C000-DDFF (ECHO RAM)
-			if(addr>=0xE000 && addr<=0xFDFF) {
+			if(addr>=0xE000 && addr<=0xEFFF) {
 				ram1[addr - 0xE000] = data;
+				return;
+			}			
+			if(addr>=0xF000 && addr<=0xFDFF) {
+				ram2[addr - 0xF000] = data;
+				return;
 			}
 			
 			if(addr>=0xFE00 && addr<=0xFE9F) {
 				oam[addr - 0xFE00] = data;
+				return;
 			}
 			
 			//FEA0-FEFF	Not Usable
 			
 			if(addr>=0xFF00 && addr<=0xFF7F) {
-				if(addr == 0xFF40) {
-					ppu.LCDC = data;
-				} else if(addr == 0xFF40) {
-					ppu.STAT = data;
-				} else {
-					ioReg[addr - 0xFF00] = data;
-				}				
+				if(addr == 0xFF01) {
+					test1 = test1 + ((char) data);
+					System.err.println("0xFF01");
+					return;
+					//System.exit(5);
+				}
+				
+				if(addr == 0xFF02) {
+					System.err.println("0xFF02");
+					test2 = test2 + ((char) data);
+					return;
+					//System.exit(5);
+				}
+				
+//				if(addr == 0xFF40) {
+//					ppu.LCDC = data;
+//					return;
+//				} else if(addr == 0xFF40) {
+//					ppu.STAT = data;
+//					return;
+//				} else {
+//					ioReg[addr - 0xFF00] = data;
+//					return;
+//				}				
 			}
 			
 			if(addr>=0xFF80 && addr<=0xFFFE) {
 				hram[addr - 0xFF80] = data;
+				return;
 			}
 			
 			if(addr==0xFFFF) {
 				ieReg = data;
+				return;
 			}
 		}
 	}
