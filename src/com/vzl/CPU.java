@@ -851,6 +851,16 @@ public class CPU {
 				y=read(PC+1);
 				result=x-y;
 				break;
+			case AM_R_R:
+				x=fetchRegisterData(currentInstruction.reg1);
+				y=fetchRegisterData(currentInstruction.reg2);
+				result=x-y;
+				break;
+			case AM_R_MR:
+				x=fetchRegisterData(currentInstruction.reg1);
+				y=read(fetchRegisterData(currentInstruction.reg2));
+				result=x-y;
+				break;
 			default:
 				System.err.println("\tCP INVALID ADDRESS MODE");
 				System.exit(1);
