@@ -3,7 +3,6 @@ package com.vzl;
 public class Bus {
 	String test1 = "";
 	String test2 = "";
-	int cycles = 0;
 	
 	private CPU cpu;
 	private Cartridge cart;
@@ -48,7 +47,6 @@ public class Bus {
 	//data size - 8 bit(1 byte)
 	
 	public int read(int addr) {
-		cycles++;
 		if(addr>=0x0000 && addr<=0xFFFF) {
 			if(addr>=0x0000 && addr<=0x3FFF) {
 				//return romBank00[addr];
@@ -117,7 +115,6 @@ public class Bus {
 	}
 	
 	public void write(int addr, int data) {
-		cycles++;
 		if(addr>=0x0000 && addr<=0xFFFF) {
 			if(addr>=0x0000 && addr<=0x3FFF) {
 				//romBank00[addr] = data;

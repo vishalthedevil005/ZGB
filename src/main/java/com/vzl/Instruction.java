@@ -129,7 +129,7 @@ public class Instruction {
 			case AM_R:
 				return String.format("%s %s",type.toString().substring(3),reg1.toString().substring(3));
 			case AM_MR:
-				return String.format("%s %s",type.toString().substring(3),reg1.toString().substring(3));
+				return String.format("%s (%s)",type.toString().substring(3),reg1.toString().substring(3));
 			case AM_R_R:
 				return String.format("%s %s,%s",type.toString().substring(3),reg1.toString().substring(3),reg2.toString().substring(3));
 			case AM_R_D16:

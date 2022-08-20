@@ -4,9 +4,13 @@ import java.io.File;
 
 import javax.swing.SwingUtilities;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.vzl.ui.Window;
 
 public class Tester {
+	private static final Logger logger = LogManager.getLogger();
 	private static Thread cpuThread;
 	
 	public static void main(String[] args) throws InterruptedException {
@@ -18,7 +22,7 @@ public class Tester {
 		bus.connectCPU(cpu);
 		
 		Cartridge cart = new Cartridge();
-		cart.loadCart(new File("E://gb-test-roms-master//cpu_instrs//individual//01-special.gb"));
+		cart.loadCart(new File(""));
 		bus.connect(cart);
 		
 		bus.connect(ppu);
@@ -31,11 +35,12 @@ public class Tester {
 //		});
 		
 		while(true) {
-			cpu.printRegisters();
-			cpu.printFlags();
+//			cpu.printRegisters();
+//			cpu.printFlags();
+			//logger.info(cpu.getRegistersStatus() + " " + cpu.getFlagsStatus());
 			cpu.fetch();
 			cpu.execute();
-			//Thread.sleep(1000);
+			//Thread.sleep(2000);
 		}
 	}
 }
