@@ -179,13 +179,13 @@ public class Bus {
 			if(addr>=0xFF00 && addr<=0xFF7F) {
 				if(addr == 0xFF01) {
 					test1 = test1 + ((char) data);
-					System.err.println("0xFF01");
+					System.out.print((char) data);
 					return;
 					//System.exit(5);
 				}
 				
 				if(addr == 0xFF02) {
-					System.err.println("0xFF02");
+					//System.out.print((char) data);;
 					test2 = test2 + ((char) data);
 					return;
 					//System.exit(5);
