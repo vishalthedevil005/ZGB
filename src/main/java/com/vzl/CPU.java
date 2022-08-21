@@ -301,6 +301,7 @@ public class CPU {
 		}
 	};
 	
+	//A: 01 F: B0 B: 00 C: 13 D: 00 E: D8 H: 01 L: 4D
 	//Registers
 	private int A=0x01;
 	private int B=0xFF;
@@ -357,7 +358,8 @@ public class CPU {
 	}
 	
 	public String getRegistersStatus() {
-		return String.format("[AF: %04X, BC: %04X, DE: %04X, HL: %04X, PC: %04X, SP: %04X]", Utils.to16bit(A, F), Utils.to16bit(B, C), Utils.to16bit(D, E), Utils.to16bit(H, L), PC, SP);
+		//return String.format("[AF: %04X, BC: %04X, DE: %04X, HL: %04X, PC: %04X, SP: %04X]", Utils.to16bit(A, F), Utils.to16bit(B, C), Utils.to16bit(D, E), Utils.to16bit(H, L), PC, SP);
+		return String.format("A: %02X F: %02X B: %02X C: %02X D: %02X E: %02X H: %02X L: %02X SP: %04X PC: 00:%04X (%02X %02X %02X %02X)", A, F, B, C, D, E, H, L, SP, PC, bus.read(PC), bus.read(PC+1), bus.read(PC+2), bus.read(PC+3));
 	}
 	
 	public String getFlagsStatus() {
@@ -473,6 +475,9 @@ public class CPU {
 				break;
 			case IN_RRCA:
 				iexec_IN_RRCA.execute();
+				break;
+			case IN_RETI:
+				iexec_IN_RETI.execute();
 				break;
 			case IN_HALT:
 				System.err.println("\tHALT");				
@@ -597,15 +602,6 @@ public class CPU {
 						|| currentInstruction.reg1.toString()=="RT_HL"
 						|| currentInstruction.reg1.toString()=="RT_SP")) {
 					result = (x + y) & 0xFF;
-//					if(result==0) {
-//						flag = flag | (1 << 7);
-//					}//z dependent
-//					//n = 0	(flag = flag | (0 << 6))
-//					if((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) {
-//						flag = flag | (1 << 5);
-//					}//h dependent
-//					flag = flag | (F & 0x10);//c unchanged			
-//					F = flag;
 					setFlags(((result == 0) ? 1 : 0), 0, (((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) ? 1 : 0), ((F >> 4) & 0x1));
 				} else {
 					result = (x + y) & 0xFFFF;
@@ -616,15 +612,6 @@ public class CPU {
 			case AM_MR:
 				x = read(fetchRegisterData(currentInstruction.reg1));
 				result = (x + y) & 0xFF;
-//				if(result==0) {
-//					flag = flag | (1 << 7);
-//				}//z dependent
-//				//n = 0	(flag = flag | (0 << 6))
-//				if((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) {
-//					flag = flag | (1 << 5);
-//				}//h dependent
-//				flag = flag | (F & 0x10);//c unchanged			
-//				F = flag;
 				write(fetchRegisterData(currentInstruction.reg1),result);
 				setFlags(((result == 0) ? 1 : 0), 0, (((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) ? 1 : 0), ((F >> 4) & 0x1));
 				break;
@@ -661,10 +648,6 @@ public class CPU {
 				System.err.println("\tXOR INVALID ADDRESS MODE");
 				System.exit(1);
 		}
-//		if(result==0) {
-//			flag = flag | (1 << 7);
-//		}//z dependent, n=0,h=0,c=0		
-//		F = flag;
 		setFlags(((result == 0) ? 1 : 0), 0, 0, 0);
 		PC = PC + currentInstruction.length;
 		//System.out.println("\tExecuting XOR");
@@ -704,7 +687,12 @@ public class CPU {
 			case AM_A16_R:
 				x = Utils.to16bit(read(PC+2),read(PC+1));
 				y = fetchRegisterData(currentInstruction.reg1);
-				write(x,y);
+				if(currentInstruction.reg1.toString() == "RT_SP") {
+					write(x,(y & 0xFF)); //lo
+					write(x+1,((y & 0xFF00) >> 8)); //hi
+				} else {
+					write(x,y);
+				}
 				break;
 			case AM_R_A16:
 				x = Utils.to16bit(read(PC+2),read(PC+1));
@@ -758,15 +746,6 @@ public class CPU {
 						|| currentInstruction.reg1.toString()=="RT_HL"
 						|| currentInstruction.reg1.toString()=="RT_SP")) {
 					result = (x - y) & 0xFF;
-//					if(result==0) {
-//						flag = flag | (1 << 7);
-//					}//z dependent
-//					flag = flag | (1 << 6);//n=1
-//					if(((x & 0xF) - (y & 0xF)) < 0) {
-//						flag = flag | (1 << 5);
-//					}//h dependent
-//					flag = flag | (F & 0x10);//c unchanged				
-//					F = flag;
 					setFlags(((result == 0) ? 1 : 0), 1, (((x & 0xF) < (y & 0xF)) ? 1 : 0), ((F >> 4) & 0x1));
 				} else {
 					result = (x - y) & 0xFFFF;
@@ -777,15 +756,6 @@ public class CPU {
 			case AM_MR:
 				x = read(fetchRegisterData(currentInstruction.reg1));
 				result = (x - y) & 0xFF;
-//				if(result==0) {
-//					flag = flag | (1 << 7);
-//				}//z dependent
-//				flag = flag | (1 << 6);//n=1
-//				if(((x & 0xF) - (y & 0xF)) < 0) {
-//					flag = flag | (1 << 5);
-//				}//h dependent
-//				flag = flag | (F & 0x10);//c unchanged				
-//				F = flag;
 				write(fetchRegisterData(currentInstruction.reg1),result);
 				setFlags(((result == 0) ? 1 : 0), 1, (((x & 0xF) < (y & 0xF)) ? 1 : 0), ((F >> 4) & 0x1));
 				break;
@@ -876,10 +846,8 @@ public class CPU {
 			case AM_R_MR:
 				x = fetchRegisterData(currentInstruction.reg2);
 				x = (0xFF00+x) & 0xFFFF;
-				result = read(x);
-				updateRegisterData(currentInstruction.reg1,result);				
-				y = fetchRegisterData(currentInstruction.reg2);
-				write(x,y);
+				y = read(x);
+				updateRegisterData(currentInstruction.reg1,y);
 				break;
 			default:
 				System.err.println("\tLDH INVALID ADDRESS MODE");
@@ -911,20 +879,7 @@ public class CPU {
 				System.err.println("\tCP INVALID ADDRESS MODE");
 				System.exit(1);
 		}
-		
-//		if(result==0) {
-//			flag = flag | (1 << 7);
-//		}//z dependent
-//		flag = flag | (1 << 6);//n=1
-//		if(((x & 0xF) - (y & 0xF)) < 0) {
-//			flag = flag | (1 << 5);
-//		}//h dependent
-//		if(x < y) {
-//			flag = flag | (1 << 4);
-//		}//c dependent				
-//		F = flag;
-		setFlags(((result == 0) ? 1 : 0), 1, (((x & 0xF) < (y & 0xF)) ? 1 : 0), ((x < y) ? 1 : 0));
-		
+		setFlags(((result == 0) ? 1 : 0), 1, (((x & 0xF) < (y & 0xF)) ? 1 : 0), ((x < y) ? 1 : 0));		
 		PC = PC + currentInstruction.length;
 		//System.out.println("\tExecuting CP");
 	};
@@ -1007,10 +962,6 @@ public class CPU {
 				System.err.println("\tOR INVALID ADDRESS MODE");
 				System.exit(1);
 		}
-//		if(result==0) {
-//			flag = flag | (1 << 7);
-//		}//z dependent,n=0,h=0,c=0
-//		F = flag;
 		setFlags(((result == 0) ? 1 : 0), 0, 0, 0);
 		PC = PC + currentInstruction.length;
 		//System.out.println("\tExecuting OR");
@@ -1059,11 +1010,7 @@ public class CPU {
 		x=fetchRegisterData(currentInstruction.reg1);
 		updateRegisterData(currentInstruction.reg1, ((~x) & 0xFF));
 		PC = PC + currentInstruction.length;
-		
-//		flag = (F & 0x80) | (1 << 6) | (1 << 5) | (F & 0x10); //z unchanged, n=1, h=1 and c unchanged
-//		F = flag;
-		setFlags(((F >> 7) & 0x1), 1, 1, ((F >> 4) & 0x1));
-		
+		setFlags(((F >> 7) & 0x1), 1, 1, ((F >> 4) & 0x1));		
 		//System.out.println("\tExecuting CPL");
 	};
 	
@@ -1092,13 +1039,6 @@ public class CPU {
 				System.err.println("\tAND INVALID ADDRESS MODE");
 				System.exit(1);
 		}
-//		if(result==0) {
-//			flag = flag | (1 << 7);
-//		}//z dependent
-//		//n=0 (flag = flag | (0 << 6))
-//		flag = flag | (1 << 5); //h=1
-//		//c=0 (flag = flag | (0 << 4))
-//		F = flag;
 		setFlags(((result==0) ? 1 : 0), 0, 1, 0);
 		
 		PC = PC + currentInstruction.length;
@@ -1131,32 +1071,9 @@ public class CPU {
 						|| currentInstruction.reg1.toString()=="RT_HL"
 						|| currentInstruction.reg1.toString()=="RT_SP")) {
 					result = (x + y) & 0xFF;
-					//Update flags
-//					if(result==0) {
-//						flag = flag | (1 << 7);
-//					}//z dependent
-//					//n = 0 (flag = flag + (0 << 6))
-//					if((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) {
-//						flag = flag | (1 << 5);
-//					}//h dependent					
-//					if(result>0xFF) {
-//						flag = flag | (1 << 4);
-//					}//c dependent
-//					
-//					F = flag;
 					setFlags(((result==0) ? 1 : 0), 0, (((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) ? 1 : 0), (((x + y) > 0xFF) ? 1 : 0));
 				} else {
 					result = (x + y) & 0xFFFF;
-//					//Update flags
-//					flag = F & 0x80;//z unchanged
-//					//n = 0 (flag = flag | (0 << 6))
-//					if((((x & 0xFFF) + (y & 0xFFF)) & 0x100) == 0x100) {
-//						flag = flag | (1 << 5);
-//					}//h dependent					
-//					if(result>0xFFFF) {
-//						flag = flag | (1 << 4);
-//					}//c dependent					
-//					F = flag;
 					setFlags(((F >> 7) & 0x1), 0, (((((x & 0xFFF) + (y & 0xFFF)) & 0x1000) == 0x1000) ? 1 : 0), (((x + y) > 0xFFFF) ? 1 : 0));
 					cycles++;
 				}				
@@ -1167,18 +1084,6 @@ public class CPU {
 				y = read(fetchRegisterData(currentInstruction.reg2));
 				result = (x + y) & 0xFF;
 				updateRegisterData(currentInstruction.reg1, result);
-//				//Update flags
-//				if(result==0) {
-//					flag = flag | (1 << 7);
-//				}//z dependent
-//				//n = 0 (flag = flag | (0 << 6))
-//				if((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) {
-//					flag = flag | (1 << 5);
-//				}//h dependent				
-//				if(result>0xFF) {
-//					flag = flag | (1 << 4);
-//				}//c dependent				
-//				F = flag;
 				setFlags(((result==0) ? 1 : 0), 0, (((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) ? 1 : 0), (((x + y) > 0xFF) ? 1 : 0));
 				break;
 			case AM_R_D8:
@@ -1186,18 +1091,6 @@ public class CPU {
 				y = read(PC+1);
 				result = (x + y) & 0xFF;
 				updateRegisterData(currentInstruction.reg1, result);
-//				//Update flags
-//				if(result==0) {
-//					flag = flag | (1 << 7);
-//				}//z dependent
-//				//n = 0 (flag = flag | (0 << 6))
-//				if((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) {
-//					flag = flag | (1 << 5);
-//				}//h dependent				
-//				if(result>0xFF) {
-//					flag = flag | (1 << 4);
-//				}//c dependent				
-//				F = flag;
 				setFlags(((result==0) ? 1 : 0), 0, (((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) ? 1 : 0), (((x + y) > 0xFF) ? 1 : 0));
 				break;
 			default:
@@ -1234,19 +1127,6 @@ public class CPU {
 				System.err.println("\tADC INVALID ADDRESS MODE");
 				System.exit(1);
 		}
-		
-//		//Update flags
-//		if(result==0) {
-//			flag = flag | (1 << 7);
-//		}//z dependent
-//		//n = 0 (flag = flag | (0 << 6))
-//		if((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) {
-//			flag = flag | (1 << 5);
-//		}//h dependent		
-//		if(result>0xFF) {
-//			flag = flag | (1 << 4);
-//		}//c dependent		
-//		F = flag;
 		setFlags(((result==0) ? 1 : 0), 0, (((((x & 0xF) + (y & 0xF) + ((F & 0x10) >> 4)) & 0x10) == 0x10) ? 1 : 0), (((x + y + ((F & 0x10) >> 4)) > 0xFF) ? 1 : 0));
 		
 		PC = PC + currentInstruction.length;
@@ -1279,18 +1159,6 @@ public class CPU {
 				System.exit(3);
 				break;
 		}
-//		//Update flags
-//		if(result==0) {
-//			flag = flag | (1 << 7);
-//		}//z dependent						
-//		flag = flag | (1 << 6);//n=1						
-//		if((x & 0xF) < (y & 0xF)) {
-//			flag = flag | (1 << 5);
-//		}//h dependent						
-//		if(x < y) {
-//			flag = flag | (1 << 4);
-//		}//c dependent						
-//		F = flag;
 		setFlags(((result==0) ? 1 : 0), 1, (((x & 0xF) < (y & 0xF)) ? 1 : 0), ((x < y) ? 1 : 0));
 		
 		PC = PC + currentInstruction.length;
@@ -1322,19 +1190,6 @@ public class CPU {
 				System.err.println("\tSBC INVALID ADDRESS MODE");
 				System.exit(1);
 		}
-		
-//		//Update flags
-//		if(result==0) {
-//			flag = flag | (1 << 7);
-//		}//z dependent						
-//		flag = flag + (1 << 6);//n=1						
-//		if((x & 0xF) < (y & 0xF)) {
-//			flag = flag | (1 << 5);
-//		}//h dependent						
-//		if(x < y) {
-//			flag = flag | (1 << 4);
-//		}//c dependent						
-//		F = flag;
 		setFlags(((result==0) ? 1 : 0), 1, (( ((x & 0xF) - (y & 0xF) - ((F & 0x10) >> 4)) < 0) ? 1 : 0), (( (x - y - ((F & 0x10) >> 4)) < 0) ? 1 : 0));
 		
 		
@@ -1385,10 +1240,8 @@ public class CPU {
 	InstructionExecutor iexec_IN_RRA = () -> {
 		x = fetchRegisterData(RegisterType.RT_A);
 		result = ((x >> 1) | ((F << 3) & 0x80)) & 0xFF;
-		flag = (x & 0x1) << 4; //z=0,h=0,n=0,c=dependent
-		F = flag;
-		updateRegisterData(RegisterType.RT_A,result);
-		
+		setFlags(0, 0, 0, (x & 0x1));
+		updateRegisterData(RegisterType.RT_A,result);		
 		PC = PC + currentInstruction.length;
 		//System.out.println("\tExecuting RRA");
 	};
@@ -1396,10 +1249,8 @@ public class CPU {
 	InstructionExecutor iexec_IN_RLA = () -> {
 		x = fetchRegisterData(RegisterType.RT_A);
 		result = ((x << 1) | ((F >> 4) & 0x1)) & 0xFF;
-		flag = (x & 0x80) >> 3; //z=0,h=0,n=0,c=dependent
-		F = flag;
-		updateRegisterData(RegisterType.RT_A,result);
-		
+		setFlags(0, 0, 0, ((x & 0x80) >> 7));
+		updateRegisterData(RegisterType.RT_A,result);		
 		PC = PC + currentInstruction.length;
 		//System.out.println("\tExecuting RLA");
 	};
@@ -1419,31 +1270,6 @@ public class CPU {
 	};
 	
 	InstructionExecutor iexec_IN_DAA = () -> {
-//		private void Daa()
-//        {
-//            byte adjustment = 0;
-//
-//            if (carry || (A > 0x99 && !negative))
-//            {
-//                adjustment = 0x60;
-//                carry = true;
-//            }
-//
-//            if (halfCarry || ((A & 0x0f) > 0x09 && !negative))
-//            {
-//                adjustment += 0x06;
-//            }
-//
-//            A += negative ? (byte)-adjustment : adjustment;
-//
-//            zero = A == 0;
-//            halfCarry = false;
-//        }
-		
-		
-		
-		
-		
 		int correction = 0;
 		int n = ((F >> 6) & 0x1);
 		int h = ((F >> 5) & 0x1);
@@ -1486,6 +1312,18 @@ public class CPU {
 		setFlags(0, 0, 0, (x & 0x1));
 		PC = PC + currentInstruction.length;
 		//System.out.println("\tExecuting RRCA");
+	};
+	
+	InstructionExecutor iexec_IN_RETI = () -> {
+		x=0;y=0;result=0;
+		x=read(SP); //low
+		y=read(SP+1);//high
+		result = Utils.to16bit(y, x);
+		
+		SP=SP+2;		
+		PC = result;
+		IME = true;
+		cycles++;		
 	};
 	
 	//CB instructions	
@@ -1863,11 +1701,7 @@ public class CPU {
 				System.err.println("\tSWAP INVALID ADDRESS MODE");
 				System.exit(1);
 		}
-		
-//		if(result==0) {
-//			flag = flag | (1 << 7);
-//		}// z dependent, n=0, h=0, c=0
-//		F = flag;		
+				
 		setFlags(((result == 0) ? 1 : 0), 0, 0, 0);
 		
 		PC = PC + currentInstruction.length;
@@ -1933,13 +1767,6 @@ public class CPU {
 				x = fetchRegisterData(currentInstruction.reg1);
 				result = (x >> 1) & 0xFF;
 				updateRegisterData(currentInstruction.reg1, result);
-				
-//				if(result == 0) {
-//					flag = flag | (1 << 7);
-//				}//z=dependent
-//				//n=0,h=0
-//				flag = flag | ((x & 0x1) << 4);//c=dependent(stores bit 0 of data)
-//				F = flag;
 				setFlags(((result == 0) ? 1 : 0), 0, 0, (x & 0x1));
 				break;
 			case AM_MR:
@@ -1947,13 +1774,6 @@ public class CPU {
 				y = read(x);
 				result = (y >> 1) & 0xFF;				
 				write(x,result);
-				
-//				if(result == 0) {
-//					flag = flag | (1 << 7);
-//				}//z=dependent
-//				//n=0,h=0
-//				flag = flag | ((y & 0x1) << 4);//c=dependent(stores bit 0 of data)
-//				F = flag;
 				setFlags(((result == 0) ? 1 : 0), 0, 0, (y & 0x1));
 				break;
 			default:
@@ -1972,13 +1792,6 @@ public class CPU {
 				x = fetchRegisterData(currentInstruction.reg1);
 				result = ((x >> 1) | ((F << 3) & 0x80)) & 0xFF;
 				updateRegisterData(currentInstruction.reg1,result);
-				
-//				if(result == 0) {
-//					flag = flag | (1 << 7);
-//				}//z=dependent
-//				//n=0,h=0
-//				flag = flag | ((x & 0x1) << 4);//c=dependent(stores bit 0 of data)
-//				F = flag;
 				setFlags(((result == 0) ? 1 : 0), 0, 0, (x & 0x1));
 				break;
 			case AM_MR:
@@ -1986,13 +1799,6 @@ public class CPU {
 				y = read(x);
 				result = ((y >> 1) | ((F << 3) & 0x80)) & 0xFF;
 				write(x,result);
-				
-//				if(result == 0) {
-//					flag = flag | (1 << 7);
-//				}//z=dependent
-//				//n=0,h=0
-//				flag = flag | ((y & 0x1) << 4);//c=dependent(stores bit 0 of data)
-//				F = flag;
 				setFlags(((result == 0) ? 1 : 0), 0, 0, (y & 0x1));
 				break;
 			default:
