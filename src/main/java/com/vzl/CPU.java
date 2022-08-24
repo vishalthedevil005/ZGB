@@ -75,7 +75,7 @@ public class CPU {
 			new Instruction(InstrType.IN_LD,AddressMode.AM_MR_D8,RegisterType.RT_HL,null,null,2,0), 						//x6
 			new Instruction(InstrType.IN_SCF,AddressMode.AM_IMP,null,null,null,1,0), 										//x7
 			new Instruction(InstrType.IN_JR,AddressMode.AM_D8,null,null,ConditionType.CT_C,2,0), 							//x8
-			new Instruction(InstrType.IN_ADD,AddressMode.AM_R_R,RegisterType.RT_HL,RegisterType.RT_SP,null,0,0), 			//x9
+			new Instruction(InstrType.IN_ADD,AddressMode.AM_R_R,RegisterType.RT_HL,RegisterType.RT_SP,null,1,0), 			//x9
 			new Instruction(InstrType.IN_LD,AddressMode.AM_R_HLD,RegisterType.RT_A,RegisterType.RT_HL,null,1,0), 			//xA
 			new Instruction(InstrType.IN_DEC,AddressMode.AM_R,RegisterType.RT_SP,null,null,1,0), 							//xB
 			new Instruction(InstrType.IN_INC,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 							//xC
@@ -304,13 +304,13 @@ public class CPU {
 	//A: 01 F: B0 B: 00 C: 13 D: 00 E: D8 H: 01 L: 4D
 	//Registers
 	private int A=0x01;
-	private int B=0xFF;
+	private int B=0x00;
 	private int C=0x13;
 	private int D=0x00;
-	private int E=0xC1;
-	private int H=0x84;
-	private int L=0x83;
-	private int F=0x00;	// Flags
+	private int E=0xD8;
+	private int H=0x01;
+	private int L=0x4D;
+	private int F=0xB0;	// Flags
 	/* 
 	 * Flag registers - lower 8bits of AF
 		 Bit	Name	Explanation
@@ -367,6 +367,9 @@ public class CPU {
 	}
 	
 	public void fetch() {
+		if(PC == 0xC000) {
+			System.out.println("");
+		}
 		cycles = 0;
 		opcode = read(PC);
 		currentInstruction = OPCODE_TABLE[opcode/16][opcode%16];
@@ -725,8 +728,13 @@ public class CPU {
 				break;
 			case AM_HL_SP:
 				x = fetchRegisterData(currentInstruction.reg2);
-				sb = (byte) read(PC+1);
-				updateRegisterData(currentInstruction.reg1, x + sb);
+				y = read(PC+1);
+				result = (x + ((byte)y)) & 0xFFFF;
+				int h = 0,c = 0;
+				h = (((((x & 0xF) + ((y & 0xFF) & 0xF)) & 0x10) == 0x10) ? 1 : 0);
+				c = (((x & 0xFF) + (y & 0xFF)) > 0xFF) ? 1 : 0;
+				setFlags(0, 0, h, c);
+				updateRegisterData(currentInstruction.reg1, result);
 				break;
 			default:
 				System.err.println("\tLD INVALID ADDRESS MODE");
@@ -1093,6 +1101,18 @@ public class CPU {
 				updateRegisterData(currentInstruction.reg1, result);
 				setFlags(((result==0) ? 1 : 0), 0, (((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) ? 1 : 0), (((x + y) > 0xFF) ? 1 : 0));
 				break;
+			case AM_R_A8:
+				if(currentInstruction.reg1.toString()=="RT_SP") {
+					x = fetchRegisterData(currentInstruction.reg1);
+					y = read(PC+1);
+					result = (x + ((byte)y)) & 0xFFFF;
+					int h = 0,c = 0;
+					h = (((((x & 0xF) + ((y & 0xFF) & 0xF)) & 0x10) == 0x10) ? 1 : 0);
+					c = (((x & 0xFF) + (y & 0xFF)) > 0xFF) ? 1 : 0;
+					setFlags(0, 0, h, c);
+					updateRegisterData(currentInstruction.reg1, result);
+				}
+				break;
 			default:
 				System.err.println("\tADD INVALID ADDRESS MODE");
 				System.exit(1);
@@ -1298,7 +1318,7 @@ public class CPU {
 	
 	InstructionExecutor iexec_IN_RLCA = () -> {
 		x = fetchRegisterData(RegisterType.RT_A);
-		result = (x << 1) | ((x & 0x80) >> 7);		
+		result = ((x << 1) | ((x & 0x80) >> 7)) & 0xFF;		
 		updateRegisterData(RegisterType.RT_A,result);
 		setFlags(0, 0, 0, ((x & 0x80) >> 7));
 		PC = PC + currentInstruction.length;
@@ -1307,7 +1327,7 @@ public class CPU {
 	
 	InstructionExecutor iexec_IN_RRCA = () -> {
 		x = fetchRegisterData(RegisterType.RT_A);
-		result = (x >> 1) | ((x & 0x1) << 7);		
+		result = ((x >> 1) | ((x & 0x1) << 7)) & 0xFF;		
 		updateRegisterData(RegisterType.RT_A,result);
 		setFlags(0, 0, 0, (x & 0x1));
 		PC = PC + currentInstruction.length;
@@ -1343,24 +1363,24 @@ public class CPU {
 			new Instruction(InstrType.IN_RLC,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//x5
 			new Instruction(InstrType.IN_RLC,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//x6
 			new Instruction(InstrType.IN_RLC,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//x7
-			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_B,null,null,0,0), 				//x8
-			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_C,null,null,0,0), 				//x9
-			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_D,null,null,0,0), 				//xA
-			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_E,null,null,0,0), 				//xB
-			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_H,null,null,0,0), 				//xC
-			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_L,null,null,0,0), 				//xD
+			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 				//x8
+			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 				//x9
+			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 				//xA
+			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 				//xB
+			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 				//xC
+			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//xD
 			new Instruction(InstrType.IN_RRC,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//xE
-			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_A,null,null,0,0), 				//xF
+			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//xF
 		},
 		{//1x
-			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_B,null,null,0,0), 					//x0
-			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_C,null,null,0,0), 					//x1
-			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_D,null,null,0,0), 					//x2
-			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_E,null,null,0,0), 					//x3
-			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_H,null,null,0,0), 					//x4
-			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_L,null,null,0,0), 					//x5
+			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 					//x0
+			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 					//x1
+			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 					//x2
+			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 					//x3
+			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 					//x4
+			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 					//x5
 			new Instruction(InstrType.IN_RL,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//x6
-			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_A,null,null,0,0), 					//x7
+			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 					//x7
 			new Instruction(InstrType.IN_RR,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 					//x8
 			new Instruction(InstrType.IN_RR,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 					//x9
 			new Instruction(InstrType.IN_RR,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 					//xA

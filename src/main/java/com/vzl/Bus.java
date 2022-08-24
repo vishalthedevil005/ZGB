@@ -1,27 +1,21 @@
 package com.vzl;
 
-public class Bus {
-	String test1 = "";
-	String test2 = "";
-	
+public class Bus {	
 	private CPU cpu;
 	private Cartridge cart;
 	private PPU ppu;
 	private Memory memory;
 	
 	private int[] vram;
-	private int[] ramExt;
 	private int[] oam;
 	private int[] ioReg;
 	private int[] hram;
 	private int ieReg;
 
 	public Bus() {	
-		vram = new int[8 * 1024]; // 8 KB VRAM. In CGB mode, switchable bank 0/1
-		ramExt = new int[8 * 1024]; // 8 KB External RAM. From cartridge, switchable bank if any
-		
+		vram = new int[8 * 1024]; // 8 KB VRAM. In CGB mode, switchable bank 0/1		
 		oam = new int[4 * 40];
-		ioReg = new int[96];
+		ioReg = new int[128];
 		hram = new int[127];
 		ieReg = 0;
 	}
@@ -56,7 +50,6 @@ public class Bus {
 			}
 			
 			if(addr>=0xA000 && addr<=0xBFFF) {
-				//return ramExt[addr - 0xA000];
 				//return cart.read(addr);
 				System.out.printf("UNSUPPORTED CART RAM READ at address $%04X", addr).println();
 				System.exit(4);
@@ -74,13 +67,20 @@ public class Bus {
 			//FEA0-FEFF	Not Usable
 			
 			if(addr>=0xFF00 && addr<=0xFF7F) {
-				if(addr == 0xFF40) {
-					return ppu.LCDC;
-				} else if(addr == 0xFF41) {
-					return ppu.STAT;
+//				if(addr == 0xFF40) {
+//					return ppu.LCDC;
+//				} else if(addr == 0xFF41) {
+//					return ppu.STAT;
+//				} else {
+//					return ioReg[addr - 0xFF00];
+//				}
+				if(addr == 0xFF44) {
+					int data = ioReg[addr - 0xFF00];
+					return (data == 0x00) ? 0x90 : data;
 				} else {
 					return ioReg[addr - 0xFF00];
 				}
+				
 			}
 			
 			if(addr>=0xFF80 && addr<=0xFFFE) {
@@ -108,7 +108,6 @@ public class Bus {
 			}
 			
 			if(addr>=0xA000 && addr<=0xBFFF) {
-				//ramExt[addr - 0xA000] = data;
 				//cart.write(addr, data);
 				System.out.printf("UNSUPPORTED CART RAM WRITE at address $%04X with data $%02X", addr, data).println();
 				System.exit(4);
@@ -127,29 +126,19 @@ public class Bus {
 			
 			if(addr>=0xFF00 && addr<=0xFF7F) {
 				if(addr == 0xFF01) {
-					test1 = test1 + ((char) data);
 					System.out.print((char) data);
-					return;
-					//System.exit(5);
 				}
-				
-				if(addr == 0xFF02) {
-					//System.out.print((char) data);;
-					test2 = test2 + ((char) data);
-					return;
-					//System.exit(5);
-				}
-				
-				if(addr == 0xFF40) {
-					ppu.LCDC = data;
-					return;
-				} else if(addr == 0xFF41) {
-					ppu.STAT = data;
-					return;
-				} else {
-					ioReg[addr - 0xFF00] = data;
-					return;
-				}				
+				ioReg[addr - 0xFF00] = data;
+//				if(addr == 0xFF40) {
+//					ppu.LCDC = data;
+//					return;
+//				} else if(addr == 0xFF41) {
+//					ppu.STAT = data;
+//					return;
+//				} else {
+//					ioReg[addr - 0xFF00] = data;
+//					return;
+//				}				
 			}
 			
 			if(addr>=0xFF80 && addr<=0xFFFE) {

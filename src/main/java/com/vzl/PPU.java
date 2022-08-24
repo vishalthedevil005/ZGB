@@ -17,4 +17,12 @@ public class PPU {
 	//Pixel FIFO	
 	Queue<Integer> bgFIFO = new LinkedList<Integer>();
 	Queue<Integer> sprFIFO = new LinkedList<Integer>();
+	
+	public int read(int addr) {
+		return 00;
+	}
+	
+	public void write(int addr,int data) {
+		
+	}
 }

@@ -12,7 +12,7 @@ import java.util.Map;
 public class Cartridge {
 	private int[] romBank00;
 	private int[] romBankNN;
-	private int[][] ramBank;
+	private int[][] ramBank; // 8 KB External RAM. From cartridge, switchable bank if any
 	
 	private byte bankMode;
 	private int romBankNum = 0;
