@@ -5,19 +5,17 @@ public class Bus {
 	private Cartridge cart;
 	private PPU ppu;
 	private Memory memory;
+	private Timer timer;
 	
-	private int[] vram;
-	private int[] oam;
 	private int[] ioReg;
 	private int[] hram;
-	private int ieReg;
+	private int IE;
+	private int IF;
 
-	public Bus() {	
-		vram = new int[8 * 1024]; // 8 KB VRAM. In CGB mode, switchable bank 0/1		
-		oam = new int[4 * 40];
+	public Bus() {
 		ioReg = new int[128];
 		hram = new int[127];
-		ieReg = 0;
+		IE = 0;
 	}
 	
 	public void connectCPU(CPU cpu) {
@@ -35,6 +33,10 @@ public class Bus {
 	public void connect(Memory memory) {
 		this.memory = memory;
 	}
+	
+	public void connect(Timer timer) {
+		this.timer = timer;
+	}
 
 	//address size - 16 bit(2 byte)
 	//data size - 8 bit(1 byte)
@@ -46,13 +48,11 @@ public class Bus {
 			}
 			
 			if(addr>=0x8000 && addr<=0x9FFF) {
-				return vram[addr - 0x8000];
+				return ppu.read(addr);
 			}
 			
 			if(addr>=0xA000 && addr<=0xBFFF) {
-				//return cart.read(addr);
-				System.out.printf("UNSUPPORTED CART RAM READ at address $%04X", addr).println();
-				System.exit(4);
+				return cart.read(addr);
 			}
 			
 			if(addr>=0xC000 && addr<=0xFDFF) {
@@ -61,26 +61,24 @@ public class Bus {
 			
 			
 			if(addr>=0xFE00 && addr<=0xFE9F) {
-				return oam[addr - 0xFE00];
+				return ppu.read(addr);
 			}
 			
 			//FEA0-FEFF	Not Usable
 			
 			if(addr>=0xFF00 && addr<=0xFF7F) {
-//				if(addr == 0xFF40) {
-//					return ppu.LCDC;
-//				} else if(addr == 0xFF41) {
-//					return ppu.STAT;
-//				} else {
-//					return ioReg[addr - 0xFF00];
-//				}
-				if(addr == 0xFF44) {
-					int data = ioReg[addr - 0xFF00];
-					return (data == 0x00) ? 0x90 : data;
-				} else {
-					return ioReg[addr - 0xFF00];
+				if(addr >= 0xFF04 && addr <= 0xFF07) {
+					return timer.read(addr);					
 				}
 				
+				if(addr==0xFF0F) {
+					return IF;
+				}
+				
+				if(addr >= 0xFF40 && addr <= 0xFF4B) {
+					return ppu.read(addr);
+				}
+				return ioReg[addr - 0xFF00];
 			}
 			
 			if(addr>=0xFF80 && addr<=0xFFFE) {
@@ -88,7 +86,7 @@ public class Bus {
 			}
 			
 			if(addr==0xFFFF) {
-				return ieReg;
+				return IE;
 			}
 		}
 			
@@ -103,14 +101,12 @@ public class Bus {
 			}
 			
 			if(addr>=0x8000 && addr<=0x9FFF) {
-				vram[addr - 0x8000] = data;
+				ppu.write(addr,data);
 				return;
 			}
 			
 			if(addr>=0xA000 && addr<=0xBFFF) {
-				//cart.write(addr, data);
-				System.out.printf("UNSUPPORTED CART RAM WRITE at address $%04X with data $%02X", addr, data).println();
-				System.exit(4);
+				cart.write(addr, data);				
 			}
 			
 			if(addr>=0xC000 && addr<=0xFDFF) {
@@ -118,7 +114,7 @@ public class Bus {
 			}
 			
 			if(addr>=0xFE00 && addr<=0xFE9F) {
-				oam[addr - 0xFE00] = data;
+				ppu.write(addr,data);
 				return;
 			}
 			
@@ -127,18 +123,24 @@ public class Bus {
 			if(addr>=0xFF00 && addr<=0xFF7F) {
 				if(addr == 0xFF01) {
 					System.out.print((char) data);
+					return;
 				}
-				ioReg[addr - 0xFF00] = data;
-//				if(addr == 0xFF40) {
-//					ppu.LCDC = data;
-//					return;
-//				} else if(addr == 0xFF41) {
-//					ppu.STAT = data;
-//					return;
-//				} else {
-//					ioReg[addr - 0xFF00] = data;
-//					return;
-//				}				
+				
+				if(addr >= 0xFF04 && addr <= 0xFF07) {
+					timer.write(addr,data);
+					return;
+				}
+				 
+				if(addr==0xFF0F) {
+					IF = data;
+					return;
+				}
+				
+				if(addr >= 0xFF40 && addr <= 0xFF4B) {
+					ppu.write(addr,data);
+					return;
+				}
+				ioReg[addr - 0xFF00] = data;			
 			}
 			
 			if(addr>=0xFF80 && addr<=0xFFFE) {
@@ -147,7 +149,7 @@ public class Bus {
 			}
 			
 			if(addr==0xFFFF) {
-				ieReg = data;
+				IE = data;
 				return;
 			}
 		}

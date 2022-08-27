@@ -10,6 +10,8 @@ public class CPU {
 	int opcode = 0x00;
 	int cycles = 0;
 	
+	Timer timer = new Timer();
+	
 	static final Instruction[][] OPCODE_TABLE = {
 		{//0x
 			new Instruction(InstrType.IN_NOP,AddressMode.AM_IMP,null,null,null,1,0),										//x0
@@ -322,6 +324,9 @@ public class CPU {
 	private int PC = 0x0100; // Program counter
 	
 	private boolean IME;
+	private boolean enableIME;
+	
+	private boolean halted;
 	
 	private Bus bus;
 	
@@ -329,6 +334,7 @@ public class CPU {
 	
 	void connectBus(Bus b) {
 		this.bus = b;
+		bus.connect(timer);
 	}
 	
 	public int read(int addr) {
@@ -366,17 +372,91 @@ public class CPU {
 		return String.format("[Z: %X, N: %X, H: %X, C: %X]", ((F & 0x80) >> 7), ((F & 0x40) >> 6), ((F & 0x20) >> 5), ((F & 0x10) >> 4));
 	}
 	
-	public void fetch() {
-		if(PC == 0xC000) {
-			System.out.println("");
+	void run() {
+		if(!halted) {
+			cycles = 0;
+			fetch();
+			if(enableIME) {
+				IME = true;
+				enableIME = false;
+			}
+			execute();
+			for(int k = 0; k < (cycles * 4); k++) {
+				//update timers for each tick
+				timer.tick();
+				if(timer.requestTimerInterrupt) {
+					bus.write(0xFF0F, (bus.read(0xFF0F) | 0x4));
+					timer.requestTimerInterrupt = false;
+				}
+			}
+		} else {
+			timer.tick();
+			if(timer.requestTimerInterrupt) {
+				bus.write(0xFF0F, (bus.read(0xFF0F) | 0x4));
+				timer.requestTimerInterrupt = false;
+				halted = false;
+			}			
 		}
-		cycles = 0;
+		handleInterrupts();
+	}
+	
+	void handleInterrupts() {
+		int IF = 0, IE = 0;
+		if(IME) {
+			IF = bus.read(0xFF0F);
+			IE = bus.read(0xFFFF);			
+			if (((IE & 0x1) & (IF & 0x1)) == 0x1) {					//VBlank
+				//pushing current PC to stack
+				//System.out.println("VBlank interrupt");
+				bus.write(SP-1, (PC >> 8) & 0xFF); //high
+				bus.write(SP-2, PC & 0xFF); //low
+				SP=(SP-2);
+				PC = 0x40;
+				bus.write(0xFF0F, (IF & (~0x1 & 0xFF)) & 0xFF);
+				IME = false;
+			} else if (((IE & 0x2) & (IF & 0x2)) == 0x2) {			//LCD STAT
+				//pushing current PC to stack
+				//System.out.println("LCD STAT interrupt");
+				bus.write(SP-1, (PC >> 8) & 0xFF); //high
+				bus.write(SP-2, PC & 0xFF); //low
+				SP=(SP-2);
+				PC = 0x48;
+				bus.write(0xFF0F, (IF & (~0x2 & 0xFF)) & 0xFF);
+				IME = false;
+			} else if (((IE & 0x4) & (IF & 0x4)) == 0x4) {			//Timer
+				//pushing current PC to stack
+				//System.out.println("Timer interrupt");
+				bus.write(SP-1, (PC >> 8) & 0xFF); //high
+				bus.write(SP-2, PC & 0xFF); //low
+				SP=(SP-2);
+				PC = 0x50;
+				bus.write(0xFF0F, (IF & (~0x4 & 0xFF)) & 0xFF);
+				IME = false;
+			} else if (((IE & 0x8) & (IF & 0x8)) == 0x8) {			//Serial
+				//pushing current PC to stack
+				//System.out.println("Serial interrupt");
+				bus.write(SP-1, (PC >> 8) & 0xFF); //high
+				bus.write(SP-2, PC & 0xFF); //low
+				SP=(SP-2);
+				PC = 0x58;
+				bus.write(0xFF0F, (IF & (~0x8 & 0xFF)) & 0xFF);
+				IME = false;
+			} else if (((IE & 0x10) & (IF & 0x10)) == 0x10) {		//Joypad
+				//pushing current PC to stack
+				//System.out.println("Joypad interrupt");
+				bus.write(SP-1, (PC >> 8) & 0xFF); //high
+				bus.write(SP-2, PC & 0xFF); //low
+				SP=(SP-2);
+				PC = 0x60;
+				bus.write(0xFF0F, (IF & (~0x10 & 0xFF)) & 0xFF);
+				IME = false;
+			}
+		}
+	}
+	
+	public void fetch() {
 		opcode = read(PC);
 		currentInstruction = OPCODE_TABLE[opcode/16][opcode%16];
-//		System.out
-//		//.printf("\t(%02X %02X %02X %02X)",read(PC),read(PC+1),read(PC+2),read(PC+3))
-//		.printf("\t%s -> %s",Utils.intToHexString(opcode),currentInstruction.toString())
-//		.println();
 	}
 	
 	public void setFlags(int z, int n, int h, int c) {
@@ -483,7 +563,8 @@ public class CPU {
 				iexec_IN_RETI.execute();
 				break;
 			case IN_HALT:
-				System.err.println("\tHALT");				
+				//System.err.println("\tHALT");
+				halted = true;
 				PC = PC + currentInstruction.length;
 				break;
 			case IN_STOP:
@@ -501,6 +582,7 @@ public class CPU {
 				break;
 		}
 		//System.out.println("\tCycles: "+cycles);
+		//handleInterrupts();
 	}
 	
 	public int fetchRegisterData(RegisterType r) {
@@ -826,7 +908,7 @@ public class CPU {
 	};
 	
 	InstructionExecutor iexec_IN_EI = () -> {
-		IME = true;
+		enableIME = true;
 		PC = PC + currentInstruction.length;
 		//System.out.println("\tExecuting EI");
 	};

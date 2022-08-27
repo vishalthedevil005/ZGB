@@ -14,6 +14,10 @@ public class Cartridge {
 	private int[] romBankNN;
 	private int[][] ramBank; // 8 KB External RAM. From cartridge, switchable bank if any
 	
+	private int noOfROMBanks = 0;
+	private int romBankBitMask = 0;
+	private int noOfRAMBanks = 0;
+	
 	private byte bankMode;
 	private int romBankNum = 0;
 	private byte ramBankNum = 0;
@@ -137,11 +141,6 @@ public class Cartridge {
 	
 	public Cartridge() {
 		ch = new CartridgeHeader();
-		
-		romBank00 =  new int[16 * 1024];	//fixed
-		romBankNN =  new int[16 * 1024]; 	//switchable
-		ramBank =  new int[4][8 * 1024]; 	//switchable
-		
 		ramAccessFlag = false;
 	}
 	
@@ -252,8 +251,16 @@ public class Cartridge {
 	}
 	
 	public void initializeMemory() {
+		noOfROMBanks = getROMSize() / 16;
+		romBankBitMask = 0xFF >> (7 - (int)(Math.log(noOfROMBanks) / Math.log(2)));
+		
 		romBank00 = Arrays.copyOfRange(romData, 0x0000, 0x4000);
 		romBankNN = Arrays.copyOfRange(romData, 0x4000, 0x8000);
+		
+		noOfRAMBanks = getRAMSize() / 8;
+		if(noOfRAMBanks > 0) {
+			ramBank =  new int[noOfRAMBanks][8 * 1024]; 	//switchable
+		}
 	}
 	
 	public void switchROMBank(int bankNum) {
@@ -295,38 +302,48 @@ public class Cartridge {
 			//Enable RAM
 			if((data & 0xF) == 0xA) {
 				ramAccessFlag = true;
+				return;
 			}
 			//Disable RAM
 			if((data & 0xF) == 0x0) {
 				ramAccessFlag = false;
+				return;
 			}
 		}
 		
 		if(addr>=0x2000 && addr<=0x3FFF) {
 			romBankNum = (data & 0x1F); //only first 5 bits
+			if(romBankNum > noOfROMBanks && noOfROMBanks <= 32) {
+				romBankNum &= romBankBitMask;
+			}
 			switchROMBank(romBankNum);
+			return;
 		}
 		
 		if(addr>=0x4000 && addr<=0x5FFF) {
 			if(bankMode == 0x01) {
 				switchRAMBank(data);
+				return;
 			}
 			
 			if(bankMode == 0x00) {
 				if(ch.romSize > 0x04) {
 					romBankNum = ((data << 5) & 0xFF) + romBankNum;
 					switchROMBank(romBankNum);
+					return;
 				}
 			}
 		}
 		
 		if(addr>=0x6000 && addr<=0x7FFF) {
 			bankMode = (byte) (data & 0xF);
+			return;
 		}
 		
 		if(addr>=0xA000 && addr<=0xBFFF) {
 			if(ramAccessFlag) {
-				ramBank[ramBankNum][addr - 0xA000] = data;			
+				ramBank[ramBankNum][addr - 0xA000] = data;
+				return;
 			}			
 		}
 	}
