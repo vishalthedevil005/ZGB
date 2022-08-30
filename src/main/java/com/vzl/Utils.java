@@ -6,7 +6,7 @@ public class Utils {
 	}
 	
 	public static int to16bit (int hi, int lo) {
-		return ((hi << 8) | lo);
+		return ((hi << 8) | lo) & 0xFFFF;
 	}
 	
 	public static byte getBit(int data, int index) {
