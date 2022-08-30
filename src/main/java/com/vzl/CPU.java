@@ -300,295 +300,295 @@ public class CPU {
 	};
 	
 	static final Instruction[][] CB_OPCODE_TABLE = {
-			{//0x
-				new Instruction(InstrType.IN_RLC,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 				//x0
-				new Instruction(InstrType.IN_RLC,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 				//x1
-				new Instruction(InstrType.IN_RLC,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 				//x2
-				new Instruction(InstrType.IN_RLC,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 				//x3
-				new Instruction(InstrType.IN_RLC,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 				//x4
-				new Instruction(InstrType.IN_RLC,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//x5
-				new Instruction(InstrType.IN_RLC,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//x6
-				new Instruction(InstrType.IN_RLC,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//x7
-				new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 				//x8
-				new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 				//x9
-				new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 				//xA
-				new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 				//xB
-				new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 				//xC
-				new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//xD
-				new Instruction(InstrType.IN_RRC,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//xE
-				new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//xF
-			},
-			{//1x
-				new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 					//x0
-				new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 					//x1
-				new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 					//x2
-				new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 					//x3
-				new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 					//x4
-				new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 					//x5
-				new Instruction(InstrType.IN_RL,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//x6
-				new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 					//x7
-				new Instruction(InstrType.IN_RR,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 					//x8
-				new Instruction(InstrType.IN_RR,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 					//x9
-				new Instruction(InstrType.IN_RR,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 					//xA
-				new Instruction(InstrType.IN_RR,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 					//xB
-				new Instruction(InstrType.IN_RR,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 					//xC
-				new Instruction(InstrType.IN_RR,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 					//xD
-				new Instruction(InstrType.IN_RR,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//xE
-				new Instruction(InstrType.IN_RR,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 					//xF
-			},
-			{//2x
-				new Instruction(InstrType.IN_SLA,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 				//x0
-				new Instruction(InstrType.IN_SLA,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 				//x1
-				new Instruction(InstrType.IN_SLA,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 				//x2
-				new Instruction(InstrType.IN_SLA,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 				//x3
-				new Instruction(InstrType.IN_SLA,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 				//x4
-				new Instruction(InstrType.IN_SLA,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//x5
-				new Instruction(InstrType.IN_SLA,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//x6
-				new Instruction(InstrType.IN_SLA,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//x7
-				new Instruction(InstrType.IN_SRA,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 				//x8
-				new Instruction(InstrType.IN_SRA,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 				//x9
-				new Instruction(InstrType.IN_SRA,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 				//xA
-				new Instruction(InstrType.IN_SRA,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 				//xB
-				new Instruction(InstrType.IN_SRA,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 				//xC
-				new Instruction(InstrType.IN_SRA,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//xD
-				new Instruction(InstrType.IN_SRA,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//xE
-				new Instruction(InstrType.IN_SRA,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//xF
-			},
-			{//3x
-				new Instruction(InstrType.IN_SWAP,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 				//x0
-				new Instruction(InstrType.IN_SWAP,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 				//x1
-				new Instruction(InstrType.IN_SWAP,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 				//x2
-				new Instruction(InstrType.IN_SWAP,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 				//x3
-				new Instruction(InstrType.IN_SWAP,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 				//x4
-				new Instruction(InstrType.IN_SWAP,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//x5
-				new Instruction(InstrType.IN_SWAP,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//x6
-				new Instruction(InstrType.IN_SWAP,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//x7
-				new Instruction(InstrType.IN_SRL,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 				//x8
-				new Instruction(InstrType.IN_SRL,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 				//x9
-				new Instruction(InstrType.IN_SRL,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 				//xA
-				new Instruction(InstrType.IN_SRL,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 				//xB
-				new Instruction(InstrType.IN_SRL,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 				//xC
-				new Instruction(InstrType.IN_SRL,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//xD
-				new Instruction(InstrType.IN_SRL,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//xE
-				new Instruction(InstrType.IN_SRL,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//xF
-			},
-			{//4x
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 				//x0
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 				//x1
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 				//x2
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 				//x3
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 				//x4
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//x5
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//x6
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//x7
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_B,null,null,1,1), 				//x8
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_C,null,null,1,1), 				//x9
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_D,null,null,1,1), 				//xA
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_E,null,null,1,1), 				//xB
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_H,null,null,1,1), 				//xC
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_L,null,null,1,1), 				//xD
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,1), 				//xE
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_A,null,null,1,1), 				//xF
-			},
-			{//5x
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_B,null,null,1,2), 				//x0
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_C,null,null,1,2), 				//x1
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_D,null,null,1,2), 				//x2
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_E,null,null,1,2), 				//x3
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_H,null,null,1,2), 				//x4
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_L,null,null,1,2), 				//x5
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,2), 				//x6
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_A,null,null,1,2), 				//x7
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_B,null,null,1,3), 				//x8
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_C,null,null,1,3), 				//x9
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_D,null,null,1,3), 				//xA
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_E,null,null,1,3), 				//xB
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_H,null,null,1,3), 				//xC
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_L,null,null,1,3), 				//xD
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,3), 				//xE
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_A,null,null,1,3), 				//xF
-			},
-			{//6x
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_B,null,null,1,4), 				//x0
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_C,null,null,1,4), 				//x1
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_D,null,null,1,4), 				//x2
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_E,null,null,1,4), 				//x3
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_H,null,null,1,4), 				//x4
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_L,null,null,1,4), 				//x5
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,4), 				//x6
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_A,null,null,1,4), 				//x7
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_B,null,null,1,5), 				//x8
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_C,null,null,1,5), 				//x9
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_D,null,null,1,5), 				//xA
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_E,null,null,1,5), 				//xB
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_H,null,null,1,5), 				//xC
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_L,null,null,1,5), 				//xD
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,5), 				//xE
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_A,null,null,1,5), 				//xF
-			},
-			{//7x
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_B,null,null,1,6), 				//x0
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_C,null,null,1,6), 				//x1
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_D,null,null,1,6), 				//x2
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_E,null,null,1,6), 				//x3
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_H,null,null,1,6), 				//x4
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_L,null,null,1,6), 				//x5
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,6), 				//x6
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_A,null,null,1,6), 				//x7
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_B,null,null,1,7), 				//x8
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_C,null,null,1,7), 				//x9
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_D,null,null,1,7), 				//xA
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_E,null,null,1,7), 				//xB
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_H,null,null,1,7), 				//xC
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_L,null,null,1,7), 				//xD
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,7), 				//xE
-				new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_A,null,null,1,7), 				//xF
-			},
-			{//8x
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 				//x0
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 				//x1
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 				//x2
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 				//x3
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 				//x4
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//x5
-				new Instruction(InstrType.IN_RES,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//x6
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//x7
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_B,null,null,1,1), 				//x8
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_C,null,null,1,1), 				//x9
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_D,null,null,1,1), 				//xA
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_E,null,null,1,1), 				//xB
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_H,null,null,1,1), 				//xC
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_L,null,null,1,1), 				//xD
-				new Instruction(InstrType.IN_RES,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,1), 				//xE
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_A,null,null,1,1), 				//xF
-			},
-			{//9x
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_B,null,null,1,2), 				//x0
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_C,null,null,1,2), 				//x1
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_D,null,null,1,2), 				//x2
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_E,null,null,1,2), 				//x3
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_H,null,null,1,2), 				//x4
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_L,null,null,1,2), 				//x5
-				new Instruction(InstrType.IN_RES,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,2), 				//x6
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_A,null,null,1,2), 				//x7
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_B,null,null,1,3), 				//x8
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_C,null,null,1,3), 				//x9
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_D,null,null,1,3), 				//xA
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_E,null,null,1,3), 				//xB
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_H,null,null,1,3), 				//xC
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_L,null,null,1,3), 				//xD
-				new Instruction(InstrType.IN_RES,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,3), 				//xE
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_A,null,null,1,3), 				//xF
-			},
-			{//Ax
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_B,null,null,1,4), 				//x0
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_C,null,null,1,4), 				//x1
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_D,null,null,1,4), 				//x2
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_E,null,null,1,4), 				//x3
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_H,null,null,1,4), 				//x4
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_L,null,null,1,4), 				//x5
-				new Instruction(InstrType.IN_RES,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,4), 				//x6
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_A,null,null,1,4), 				//x7
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_B,null,null,1,5), 				//x8
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_C,null,null,1,5), 				//x9
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_D,null,null,1,5), 				//xA
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_E,null,null,1,5), 				//xB
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_H,null,null,1,5), 				//xC
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_L,null,null,1,5), 				//xD
-				new Instruction(InstrType.IN_RES,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,5), 				//xE
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_A,null,null,1,5), 				//xF
-			},
-			{//Bx
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_B,null,null,1,6), 				//x0
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_C,null,null,1,6), 				//x1
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_D,null,null,1,6), 				//x2
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_E,null,null,1,6), 				//x3
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_H,null,null,1,6), 				//x4
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_L,null,null,1,6), 				//x5
-				new Instruction(InstrType.IN_RES,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,6), 				//x6
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_A,null,null,1,6), 				//x7
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_B,null,null,1,7), 				//x8
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_C,null,null,1,7), 				//x9
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_D,null,null,1,7), 				//xA
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_E,null,null,1,7), 				//xB
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_H,null,null,1,7), 				//xC
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_L,null,null,1,7), 				//xD
-				new Instruction(InstrType.IN_RES,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,7), 				//xE
-				new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_A,null,null,1,7), 				//xF
-			},
-			{//Cx
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 				//x0
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 				//x1
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 				//x2
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 				//x3
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 				//x4
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//x5
-				new Instruction(InstrType.IN_SET,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//x6
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//x7
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_B,null,null,1,1), 				//x8
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_C,null,null,1,1), 				//x9
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_D,null,null,1,1), 				//xA
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_E,null,null,1,1), 				//xB
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_H,null,null,1,1), 				//xC
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_L,null,null,1,1), 				//xD
-				new Instruction(InstrType.IN_SET,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,1), 				//xE
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_A,null,null,1,1), 				//xF
-			},
-			{//Dx
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_B,null,null,1,2), 				//x0
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_C,null,null,1,2), 				//x1
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_D,null,null,1,2), 				//x2
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_E,null,null,1,2), 				//x3
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_H,null,null,1,2), 				//x4
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_L,null,null,1,2), 				//x5
-				new Instruction(InstrType.IN_SET,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,2), 				//x6
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_A,null,null,1,2), 				//x7
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_B,null,null,1,3), 				//x8
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_C,null,null,1,3), 				//x9
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_D,null,null,1,3), 				//xA
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_E,null,null,1,3), 				//xB
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_H,null,null,1,3), 				//xC
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_L,null,null,1,3), 				//xD
-				new Instruction(InstrType.IN_SET,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,3), 				//xE
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_A,null,null,1,3), 				//xF
-			},
-			{//Ex
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_B,null,null,1,4), 				//x0
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_C,null,null,1,4), 				//x1
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_D,null,null,1,4), 				//x2
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_E,null,null,1,4), 				//x3
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_H,null,null,1,4), 				//x4
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_L,null,null,1,4), 				//x5
-				new Instruction(InstrType.IN_SET,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,4), 				//x6
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_A,null,null,1,4), 				//x7
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_B,null,null,1,5), 				//x8
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_C,null,null,1,5), 				//x9
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_D,null,null,1,5), 				//xA
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_E,null,null,1,5), 				//xB
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_H,null,null,1,5), 				//xC
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_L,null,null,1,5), 				//xD
-				new Instruction(InstrType.IN_SET,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,5), 				//xE
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_A,null,null,1,5), 				//xF
-			},
-			{//Fx
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_B,null,null,1,6), 				//x0
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_C,null,null,1,6), 				//x1
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_D,null,null,1,6), 				//x2
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_E,null,null,1,6), 				//x3
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_H,null,null,1,6), 				//x4
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_L,null,null,1,6), 				//x5
-				new Instruction(InstrType.IN_SET,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,6), 				//x6
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_A,null,null,1,6), 				//x7
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_B,null,null,1,7), 				//x8
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_C,null,null,1,7), 				//x9
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_D,null,null,1,7), 				//xA
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_E,null,null,1,7), 				//xB
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_H,null,null,1,7), 				//xC
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_L,null,null,1,7), 				//xD
-				new Instruction(InstrType.IN_SET,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,7), 				//xE
-				new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_A,null,null,1,7), 				//xF
-			}
-		};
+		{//0x
+			new Instruction(InstrType.IN_RLC,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 				//x0
+			new Instruction(InstrType.IN_RLC,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 				//x1
+			new Instruction(InstrType.IN_RLC,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 				//x2
+			new Instruction(InstrType.IN_RLC,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 				//x3
+			new Instruction(InstrType.IN_RLC,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 				//x4
+			new Instruction(InstrType.IN_RLC,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//x5
+			new Instruction(InstrType.IN_RLC,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//x6
+			new Instruction(InstrType.IN_RLC,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//x7
+			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 				//x8
+			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 				//x9
+			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 				//xA
+			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 				//xB
+			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 				//xC
+			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//xD
+			new Instruction(InstrType.IN_RRC,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//xE
+			new Instruction(InstrType.IN_RRC,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//xF
+		},
+		{//1x
+			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 					//x0
+			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 					//x1
+			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 					//x2
+			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 					//x3
+			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 					//x4
+			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 					//x5
+			new Instruction(InstrType.IN_RL,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//x6
+			new Instruction(InstrType.IN_RL,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 					//x7
+			new Instruction(InstrType.IN_RR,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 					//x8
+			new Instruction(InstrType.IN_RR,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 					//x9
+			new Instruction(InstrType.IN_RR,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 					//xA
+			new Instruction(InstrType.IN_RR,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 					//xB
+			new Instruction(InstrType.IN_RR,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 					//xC
+			new Instruction(InstrType.IN_RR,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 					//xD
+			new Instruction(InstrType.IN_RR,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//xE
+			new Instruction(InstrType.IN_RR,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 					//xF
+		},
+		{//2x
+			new Instruction(InstrType.IN_SLA,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 				//x0
+			new Instruction(InstrType.IN_SLA,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 				//x1
+			new Instruction(InstrType.IN_SLA,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 				//x2
+			new Instruction(InstrType.IN_SLA,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 				//x3
+			new Instruction(InstrType.IN_SLA,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 				//x4
+			new Instruction(InstrType.IN_SLA,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//x5
+			new Instruction(InstrType.IN_SLA,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//x6
+			new Instruction(InstrType.IN_SLA,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//x7
+			new Instruction(InstrType.IN_SRA,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 				//x8
+			new Instruction(InstrType.IN_SRA,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 				//x9
+			new Instruction(InstrType.IN_SRA,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 				//xA
+			new Instruction(InstrType.IN_SRA,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 				//xB
+			new Instruction(InstrType.IN_SRA,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 				//xC
+			new Instruction(InstrType.IN_SRA,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//xD
+			new Instruction(InstrType.IN_SRA,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//xE
+			new Instruction(InstrType.IN_SRA,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//xF
+		},
+		{//3x
+			new Instruction(InstrType.IN_SWAP,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 				//x0
+			new Instruction(InstrType.IN_SWAP,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 				//x1
+			new Instruction(InstrType.IN_SWAP,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 				//x2
+			new Instruction(InstrType.IN_SWAP,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 				//x3
+			new Instruction(InstrType.IN_SWAP,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 				//x4
+			new Instruction(InstrType.IN_SWAP,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//x5
+			new Instruction(InstrType.IN_SWAP,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//x6
+			new Instruction(InstrType.IN_SWAP,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//x7
+			new Instruction(InstrType.IN_SRL,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 				//x8
+			new Instruction(InstrType.IN_SRL,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 				//x9
+			new Instruction(InstrType.IN_SRL,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 				//xA
+			new Instruction(InstrType.IN_SRL,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 				//xB
+			new Instruction(InstrType.IN_SRL,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 				//xC
+			new Instruction(InstrType.IN_SRL,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//xD
+			new Instruction(InstrType.IN_SRL,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//xE
+			new Instruction(InstrType.IN_SRL,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//xF
+		},
+		{//4x
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 				//x0
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 				//x1
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 				//x2
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 				//x3
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 				//x4
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//x5
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//x6
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//x7
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_B,null,null,1,1), 				//x8
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_C,null,null,1,1), 				//x9
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_D,null,null,1,1), 				//xA
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_E,null,null,1,1), 				//xB
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_H,null,null,1,1), 				//xC
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_L,null,null,1,1), 				//xD
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,1), 				//xE
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_A,null,null,1,1), 				//xF
+		},
+		{//5x
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_B,null,null,1,2), 				//x0
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_C,null,null,1,2), 				//x1
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_D,null,null,1,2), 				//x2
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_E,null,null,1,2), 				//x3
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_H,null,null,1,2), 				//x4
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_L,null,null,1,2), 				//x5
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,2), 				//x6
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_A,null,null,1,2), 				//x7
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_B,null,null,1,3), 				//x8
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_C,null,null,1,3), 				//x9
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_D,null,null,1,3), 				//xA
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_E,null,null,1,3), 				//xB
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_H,null,null,1,3), 				//xC
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_L,null,null,1,3), 				//xD
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,3), 				//xE
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_A,null,null,1,3), 				//xF
+		},
+		{//6x
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_B,null,null,1,4), 				//x0
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_C,null,null,1,4), 				//x1
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_D,null,null,1,4), 				//x2
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_E,null,null,1,4), 				//x3
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_H,null,null,1,4), 				//x4
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_L,null,null,1,4), 				//x5
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,4), 				//x6
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_A,null,null,1,4), 				//x7
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_B,null,null,1,5), 				//x8
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_C,null,null,1,5), 				//x9
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_D,null,null,1,5), 				//xA
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_E,null,null,1,5), 				//xB
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_H,null,null,1,5), 				//xC
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_L,null,null,1,5), 				//xD
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,5), 				//xE
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_A,null,null,1,5), 				//xF
+		},
+		{//7x
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_B,null,null,1,6), 				//x0
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_C,null,null,1,6), 				//x1
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_D,null,null,1,6), 				//x2
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_E,null,null,1,6), 				//x3
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_H,null,null,1,6), 				//x4
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_L,null,null,1,6), 				//x5
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,6), 				//x6
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_A,null,null,1,6), 				//x7
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_B,null,null,1,7), 				//x8
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_C,null,null,1,7), 				//x9
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_D,null,null,1,7), 				//xA
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_E,null,null,1,7), 				//xB
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_H,null,null,1,7), 				//xC
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_L,null,null,1,7), 				//xD
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,7), 				//xE
+			new Instruction(InstrType.IN_BIT,AddressMode.AM_R,RegisterType.RT_A,null,null,1,7), 				//xF
+		},
+		{//8x
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 				//x0
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 				//x1
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 				//x2
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 				//x3
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 				//x4
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//x5
+			new Instruction(InstrType.IN_RES,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//x6
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//x7
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_B,null,null,1,1), 				//x8
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_C,null,null,1,1), 				//x9
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_D,null,null,1,1), 				//xA
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_E,null,null,1,1), 				//xB
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_H,null,null,1,1), 				//xC
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_L,null,null,1,1), 				//xD
+			new Instruction(InstrType.IN_RES,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,1), 				//xE
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_A,null,null,1,1), 				//xF
+		},
+		{//9x
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_B,null,null,1,2), 				//x0
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_C,null,null,1,2), 				//x1
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_D,null,null,1,2), 				//x2
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_E,null,null,1,2), 				//x3
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_H,null,null,1,2), 				//x4
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_L,null,null,1,2), 				//x5
+			new Instruction(InstrType.IN_RES,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,2), 				//x6
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_A,null,null,1,2), 				//x7
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_B,null,null,1,3), 				//x8
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_C,null,null,1,3), 				//x9
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_D,null,null,1,3), 				//xA
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_E,null,null,1,3), 				//xB
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_H,null,null,1,3), 				//xC
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_L,null,null,1,3), 				//xD
+			new Instruction(InstrType.IN_RES,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,3), 				//xE
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_A,null,null,1,3), 				//xF
+		},
+		{//Ax
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_B,null,null,1,4), 				//x0
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_C,null,null,1,4), 				//x1
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_D,null,null,1,4), 				//x2
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_E,null,null,1,4), 				//x3
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_H,null,null,1,4), 				//x4
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_L,null,null,1,4), 				//x5
+			new Instruction(InstrType.IN_RES,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,4), 				//x6
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_A,null,null,1,4), 				//x7
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_B,null,null,1,5), 				//x8
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_C,null,null,1,5), 				//x9
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_D,null,null,1,5), 				//xA
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_E,null,null,1,5), 				//xB
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_H,null,null,1,5), 				//xC
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_L,null,null,1,5), 				//xD
+			new Instruction(InstrType.IN_RES,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,5), 				//xE
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_A,null,null,1,5), 				//xF
+		},
+		{//Bx
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_B,null,null,1,6), 				//x0
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_C,null,null,1,6), 				//x1
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_D,null,null,1,6), 				//x2
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_E,null,null,1,6), 				//x3
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_H,null,null,1,6), 				//x4
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_L,null,null,1,6), 				//x5
+			new Instruction(InstrType.IN_RES,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,6), 				//x6
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_A,null,null,1,6), 				//x7
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_B,null,null,1,7), 				//x8
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_C,null,null,1,7), 				//x9
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_D,null,null,1,7), 				//xA
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_E,null,null,1,7), 				//xB
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_H,null,null,1,7), 				//xC
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_L,null,null,1,7), 				//xD
+			new Instruction(InstrType.IN_RES,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,7), 				//xE
+			new Instruction(InstrType.IN_RES,AddressMode.AM_R,RegisterType.RT_A,null,null,1,7), 				//xF
+		},
+		{//Cx
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_B,null,null,1,0), 				//x0
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_C,null,null,1,0), 				//x1
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_D,null,null,1,0), 				//x2
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_E,null,null,1,0), 				//x3
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_H,null,null,1,0), 				//x4
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_L,null,null,1,0), 				//x5
+			new Instruction(InstrType.IN_SET,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,0), 				//x6
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_A,null,null,1,0), 				//x7
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_B,null,null,1,1), 				//x8
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_C,null,null,1,1), 				//x9
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_D,null,null,1,1), 				//xA
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_E,null,null,1,1), 				//xB
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_H,null,null,1,1), 				//xC
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_L,null,null,1,1), 				//xD
+			new Instruction(InstrType.IN_SET,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,1), 				//xE
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_A,null,null,1,1), 				//xF
+		},
+		{//Dx
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_B,null,null,1,2), 				//x0
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_C,null,null,1,2), 				//x1
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_D,null,null,1,2), 				//x2
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_E,null,null,1,2), 				//x3
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_H,null,null,1,2), 				//x4
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_L,null,null,1,2), 				//x5
+			new Instruction(InstrType.IN_SET,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,2), 				//x6
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_A,null,null,1,2), 				//x7
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_B,null,null,1,3), 				//x8
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_C,null,null,1,3), 				//x9
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_D,null,null,1,3), 				//xA
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_E,null,null,1,3), 				//xB
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_H,null,null,1,3), 				//xC
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_L,null,null,1,3), 				//xD
+			new Instruction(InstrType.IN_SET,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,3), 				//xE
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_A,null,null,1,3), 				//xF
+		},
+		{//Ex
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_B,null,null,1,4), 				//x0
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_C,null,null,1,4), 				//x1
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_D,null,null,1,4), 				//x2
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_E,null,null,1,4), 				//x3
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_H,null,null,1,4), 				//x4
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_L,null,null,1,4), 				//x5
+			new Instruction(InstrType.IN_SET,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,4), 				//x6
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_A,null,null,1,4), 				//x7
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_B,null,null,1,5), 				//x8
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_C,null,null,1,5), 				//x9
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_D,null,null,1,5), 				//xA
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_E,null,null,1,5), 				//xB
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_H,null,null,1,5), 				//xC
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_L,null,null,1,5), 				//xD
+			new Instruction(InstrType.IN_SET,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,5), 				//xE
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_A,null,null,1,5), 				//xF
+		},
+		{//Fx
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_B,null,null,1,6), 				//x0
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_C,null,null,1,6), 				//x1
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_D,null,null,1,6), 				//x2
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_E,null,null,1,6), 				//x3
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_H,null,null,1,6), 				//x4
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_L,null,null,1,6), 				//x5
+			new Instruction(InstrType.IN_SET,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,6), 				//x6
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_A,null,null,1,6), 				//x7
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_B,null,null,1,7), 				//x8
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_C,null,null,1,7), 				//x9
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_D,null,null,1,7), 				//xA
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_E,null,null,1,7), 				//xB
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_H,null,null,1,7), 				//xC
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_L,null,null,1,7), 				//xD
+			new Instruction(InstrType.IN_SET,AddressMode.AM_MR,RegisterType.RT_HL,null,null,1,7), 				//xE
+			new Instruction(InstrType.IN_SET,AddressMode.AM_R,RegisterType.RT_A,null,null,1,7), 				//xF
+		}
+	};
 	
 	//Registers
 	private int A = 0x01;
@@ -759,108 +759,40 @@ public class CPU {
 	
 	public void execute() {
 		switch(currentInstruction.type) {
-			case IN_NOP:
-				execute_IN_NOP();
-				break;
-			case IN_JP:
-				execute_IN_JP();
-				break;
-			case IN_INC:
-				execute_IN_INC();
-				break;
-			case IN_LD:
-				execute_IN_LD();
-				break;
-			case IN_SUB:
-				execute_IN_SUB();
-				break;
-			case IN_SBC:
-				execute_IN_SBC();
-				break;
-			case IN_DEC:
-				execute_IN_DEC();
-				break;
-			case IN_JR:
-				execute_IN_JR();
-				break;
-			case IN_CPL:
-				execute_IN_CPL();
-				break;
-			case IN_CALL:
-				execute_IN_CALL();
-				break;
-			case IN_XOR:
-				execute_IN_XOR();
-				break;
-			case IN_DI:
-				execute_IN_DI();
-				break;
-			case IN_LDH:
-				execute_IN_LDH();
-				break;
-			case IN_CP:
-				execute_IN_CP();
-				break;
-			case IN_OR:
-				execute_IN_OR();
-				break;
-			case IN_RET:
-				execute_IN_RET();
-				break;
-			case IN_EI:
-				execute_IN_EI();
-				break;
-			case IN_AND:
-				execute_IN_AND();
-				break;
-			case IN_CB:
-				execute_IN_CB();
-				break;
-			case IN_RST:
-				execute_IN_RST();
-				break;
-			case IN_ADD:
-				execute_IN_ADD();
-				break;
-			case IN_ADC:
-				execute_IN_ADC();
-				break;
-			case IN_POP:
-				execute_IN_POP();
-				break;
-			case IN_PUSH:
-				execute_IN_PUSH();
-				break;
-			case IN_RRA:
-				execute_IN_RRA();
-				break;
-			case IN_RLA:
-				execute_IN_RLA();
-				break;
-			case IN_CCF:
-				execute_IN_CCF();
-				break;
-			case IN_SCF:
-				execute_IN_SCF();
-				break;
-			case IN_DAA:
-				execute_IN_DAA();
-				break;
-			case IN_RLCA:
-				execute_IN_RLCA();
-				break;
-			case IN_RRCA:
-				execute_IN_RRCA();
-				break;
-			case IN_RETI:
-				execute_IN_RETI();
-				break;
-			case IN_HALT:
-				execute_IN_HALT();
-				break;
-			case IN_STOP:
-				execute_IN_STOP();
-				break;
+			case IN_NOP:execute_IN_NOP();break;
+			case IN_JP:execute_IN_JP();break;
+			case IN_INC:execute_IN_INC();break;
+			case IN_LD:execute_IN_LD();break;
+			case IN_SUB:execute_IN_SUB();break;
+			case IN_SBC:execute_IN_SBC();break;
+			case IN_DEC:execute_IN_DEC();break;
+			case IN_JR:execute_IN_JR();break;
+			case IN_CPL:execute_IN_CPL();break;
+			case IN_CALL:execute_IN_CALL();break;
+			case IN_XOR:execute_IN_XOR();break;
+			case IN_DI:execute_IN_DI();break;
+			case IN_LDH:execute_IN_LDH();break;
+			case IN_CP:execute_IN_CP();break;
+			case IN_OR:execute_IN_OR();break;
+			case IN_RET:execute_IN_RET();break;
+			case IN_EI:execute_IN_EI();break;
+			case IN_AND:execute_IN_AND();break;
+			case IN_CB:execute_IN_CB();break;
+			case IN_RST:execute_IN_RST();break;
+			case IN_ADD:execute_IN_ADD();break;
+			case IN_ADC:execute_IN_ADC();break;
+			case IN_POP:execute_IN_POP();break;
+			case IN_PUSH:execute_IN_PUSH();break;
+			case IN_RRA:execute_IN_RRA();break;
+			case IN_RLA:execute_IN_RLA();break;
+			case IN_CCF:execute_IN_CCF();break;
+			case IN_SCF:execute_IN_SCF();break;
+			case IN_DAA:execute_IN_DAA();break;
+			case IN_RLCA:execute_IN_RLCA();break;
+			case IN_RRCA:execute_IN_RRCA();break;
+			case IN_RETI:execute_IN_RETI();break;
+			case IN_HALT:execute_IN_HALT();break;
+			case IN_STOP:execute_IN_STOP();break;
 			case IN_NONE:
 				System.err.printf("%02X - Not implemented",opcode);
 				System.exit(1);
@@ -922,10 +854,10 @@ public class CPU {
 	};
 	
 	private void execute_IN_INC() {
-		x=0;y=1;flag=0;
+		x=0;y=1;flag=0;		
 		switch(currentInstruction.mode) {
 			case AM_R:
-				x = fetchRegisterData(currentInstruction.reg1);				
+				x = fetchRegisterData(currentInstruction.reg1);
 				if(!(currentInstruction.reg1.toString()=="RT_BC" 
 						|| currentInstruction.reg1.toString()=="RT_DE" 
 						|| currentInstruction.reg1.toString()=="RT_HL"
@@ -953,29 +885,23 @@ public class CPU {
 	
 	private void execute_IN_XOR() {
 		x=0;y=0;result=0;flag=0;
+		x = fetchRegisterData(currentInstruction.reg1);
 		switch(currentInstruction.mode) {
-			case AM_R_R:
-				x = (fetchRegisterData(currentInstruction.reg1));
+			case AM_R_R:				
 				y = (fetchRegisterData(currentInstruction.reg2));
-				result = (x ^ y) & 0xFF;
-				updateRegisterData(currentInstruction.reg1, result);
 				break;
 			case AM_R_MR:
-				x = (fetchRegisterData(currentInstruction.reg1));
 				y = read(fetchRegisterData(currentInstruction.reg2));
-				result = (x ^ y) & 0xFF;
-				updateRegisterData(currentInstruction.reg1, result);
 				break;
 			case AM_R_D8:
-				x = (fetchRegisterData(currentInstruction.reg1));
-				y = read(PC+1);
-				result = (x ^ y) & 0xFF;
-				updateRegisterData(currentInstruction.reg1, result);
+				y = read(PC+1);				
 				break;
 			default:
 				System.err.println("\tXOR INVALID ADDRESS MODE");
 				System.exit(1);
 		}
+		result = (x ^ y) & 0xFF;
+		updateRegisterData(currentInstruction.reg1, result);
 		setFlags(((result == 0) ? 1 : 0), 0, 0, 0);
 		PC = PC + currentInstruction.length;
 	};
@@ -1180,26 +1106,22 @@ public class CPU {
 	
 	private void execute_IN_CP() {
 		x=0;y=0;result=0;flag=0;
+		x=fetchRegisterData(currentInstruction.reg1);
 		switch(currentInstruction.mode) {
 			case AM_R_D8:
-				x=fetchRegisterData(currentInstruction.reg1);
 				y=read(PC+1);
-				result=(x-y) & 0xFF;
 				break;
 			case AM_R_R:
-				x=fetchRegisterData(currentInstruction.reg1);
 				y=fetchRegisterData(currentInstruction.reg2);
-				result=(x-y) & 0xFF;
 				break;
 			case AM_R_MR:
-				x=fetchRegisterData(currentInstruction.reg1);
 				y=read(fetchRegisterData(currentInstruction.reg2));
-				result=(x-y) & 0xFF;
 				break;
 			default:
 				System.err.println("\tCP INVALID ADDRESS MODE");
 				System.exit(1);
 		}
+		result=(x-y) & 0xFF;
 		setFlags(((result == 0) ? 1 : 0), 1, (((x & 0xF) < (y & 0xF)) ? 1 : 0), ((x < y) ? 1 : 0));		
 		PC = PC + currentInstruction.length;
 	};
@@ -1253,29 +1175,23 @@ public class CPU {
 	
 	private void execute_IN_OR() {
 		x=0;y=0;result=0;flag=0;
+		x = fetchRegisterData(currentInstruction.reg1);
 		switch(currentInstruction.mode) {
 			case AM_R_R:
-				x = (fetchRegisterData(currentInstruction.reg1));
-				y = (fetchRegisterData(currentInstruction.reg2));
-				result = (x | y) & 0xFF;
-				updateRegisterData(currentInstruction.reg1, result);
+				y = fetchRegisterData(currentInstruction.reg2);
 				break;
 			case AM_R_D8:
-				x = (fetchRegisterData(currentInstruction.reg1));
 				y = read(PC+1);
-				result = (x | y) & 0xFF;
-				updateRegisterData(currentInstruction.reg1, result);
 				break;
 			case AM_R_MR:
-				x = (fetchRegisterData(currentInstruction.reg1));
 				y = read(fetchRegisterData(currentInstruction.reg2));
-				result = (x | y) & 0xFF;
-				updateRegisterData(currentInstruction.reg1, result);
 				break;
 			default:
 				System.err.println("\tOR INVALID ADDRESS MODE");
 				System.exit(1);
 		}
+		result = (x | y) & 0xFF;
+		updateRegisterData(currentInstruction.reg1, result);
 		setFlags(((result == 0) ? 1 : 0), 0, 0, 0);
 		PC = PC + currentInstruction.length;
 	};
@@ -1322,31 +1238,25 @@ public class CPU {
 	
 	private void execute_IN_AND() {
 		x=0;y=0;result=0;flag=0;
+		x = fetchRegisterData(currentInstruction.reg1);
 		switch(currentInstruction.mode) {
 			case AM_R_D8:
-				x = (fetchRegisterData(currentInstruction.reg1));
-				y = read(PC+1);
-				result = (x & y) & 0xFF;
-				updateRegisterData(currentInstruction.reg1, result);
+				y = read(PC+1);				
 				break;
 			case AM_R_R:
-				x = (fetchRegisterData(currentInstruction.reg1));
 				y = (fetchRegisterData(currentInstruction.reg2));
-				result = (x & y) & 0xFF;
-				updateRegisterData(currentInstruction.reg1, result);
 				break;
 			case AM_R_MR:
-				x = (fetchRegisterData(currentInstruction.reg1));
 				y = read(fetchRegisterData(currentInstruction.reg2));
-				result = (x & y) & 0xFF;
-				updateRegisterData(currentInstruction.reg1, result);
 				break;
 			default:
 				System.err.println("\tAND INVALID ADDRESS MODE");
 				System.exit(1);
 		}
-		setFlags(((result==0) ? 1 : 0), 0, 1, 0);
 		
+		result = (x & y) & 0xFF;
+		updateRegisterData(currentInstruction.reg1, result);
+		setFlags(((result==0) ? 1 : 0), 0, 1, 0);		
 		PC = PC + currentInstruction.length;
 	};
 	
@@ -1366,9 +1276,9 @@ public class CPU {
 	
 	private void execute_IN_ADD() {
 		x=0;y=0;result=0;flag=0;
+		x = fetchRegisterData(currentInstruction.reg1);
 		switch(currentInstruction.mode) {
-			case AM_R_R:
-				x = fetchRegisterData(currentInstruction.reg1);
+			case AM_R_R:				
 				y = fetchRegisterData(currentInstruction.reg2);
 				if(!(currentInstruction.reg1.toString()=="RT_BC" 
 						|| currentInstruction.reg1.toString()=="RT_DE" 
@@ -1384,14 +1294,12 @@ public class CPU {
 				updateRegisterData(currentInstruction.reg1, result);
 				break;
 			case AM_R_MR:
-				x = fetchRegisterData(currentInstruction.reg1);
 				y = read(fetchRegisterData(currentInstruction.reg2));
 				result = (x + y) & 0xFF;
 				updateRegisterData(currentInstruction.reg1, result);
 				setFlags(((result==0) ? 1 : 0), 0, (((((x & 0xF) + (y & 0xF)) & 0x10) == 0x10) ? 1 : 0), (((x + y) > 0xFF) ? 1 : 0));
 				break;
 			case AM_R_D8:
-				x = fetchRegisterData(currentInstruction.reg1);
 				y = read(PC+1);
 				result = (x + y) & 0xFF;
 				updateRegisterData(currentInstruction.reg1, result);
@@ -1399,7 +1307,6 @@ public class CPU {
 				break;
 			case AM_R_A8:
 				if(currentInstruction.reg1.toString()=="RT_SP") {
-					x = fetchRegisterData(currentInstruction.reg1);
 					y = read(PC+1);
 					result = (x + ((byte)y)) & 0xFFFF;
 					int h = 0,c = 0;
@@ -1419,93 +1326,72 @@ public class CPU {
 	
 	private void execute_IN_ADC() {
 		x=0;y=0;flag=0;result=0;
+		x = fetchRegisterData(currentInstruction.reg1);
 		switch(currentInstruction.mode) {
-			case AM_R_R:
-				x = fetchRegisterData(currentInstruction.reg1);
+			case AM_R_R:				
 				y = fetchRegisterData(currentInstruction.reg2);
-				result = (x + y + ((F & 0x10) >> 4)) & 0xFF;
-				updateRegisterData(currentInstruction.reg1, result);
 				break;
 			case AM_R_MR:
-				x = fetchRegisterData(currentInstruction.reg1);
 				y = read(fetchRegisterData(currentInstruction.reg2));
-				result = (x + y + ((F & 0x10) >> 4)) & 0xFF;
-				updateRegisterData(currentInstruction.reg1, result);
 				break;
 			case AM_R_D8:
-				x = fetchRegisterData(currentInstruction.reg1);
 				y = read(PC+1);
-				result = (x + y + ((F & 0x10) >> 4)) & 0xFF;
-				updateRegisterData(currentInstruction.reg1, result);
 				break;
 			default:
 				System.err.println("\tADC INVALID ADDRESS MODE");
 				System.exit(1);
-		}
+		}		
+
+		result = (x + y + ((F & 0x10) >> 4)) & 0xFF;
+		updateRegisterData(currentInstruction.reg1, result);
 		setFlags(((result==0) ? 1 : 0), 0, (((((x & 0xF) + (y & 0xF) + ((F & 0x10) >> 4)) & 0x10) == 0x10) ? 1 : 0), (((x + y + ((F & 0x10) >> 4)) > 0xFF) ? 1 : 0));
-		
 		PC = PC + currentInstruction.length;
 	};
 	
 	private void execute_IN_SUB() {
 		x=0;y=0;flag=0;result=0;
+		x = fetchRegisterData(currentInstruction.reg1);
 		switch(currentInstruction.mode) {
-			case AM_R_R:
-				x = fetchRegisterData(currentInstruction.reg1);
+			case AM_R_R:				
 				y = fetchRegisterData(currentInstruction.reg2);
-				result = (x - y) & 0xFF;
-				updateRegisterData(currentInstruction.reg1, result);
+				
 				break;
 			case AM_R_MR:
-				x = fetchRegisterData(currentInstruction.reg1);
 				y = read(fetchRegisterData(currentInstruction.reg2));
-				result = (x - y) & 0xFF;
-				updateRegisterData(currentInstruction.reg1, result);
 				break;
 			case AM_R_D8:
-				x = fetchRegisterData(currentInstruction.reg1);
-				y = read(PC+1);
-				result = (x - y) & 0xFF;
-				updateRegisterData(currentInstruction.reg1, result);				
+				y = read(PC+1);				
 				break;
 			default:
-				System.err.println("Not implemented");
-				System.exit(3);
-				break;
+				System.err.println("\tSUB INVALID ADDRESS MODE");
+				System.exit(1);
 		}
-		setFlags(((result==0) ? 1 : 0), 1, (((x & 0xF) < (y & 0xF)) ? 1 : 0), ((x < y) ? 1 : 0));
-		
+		result = (x - y) & 0xFF;
+		updateRegisterData(currentInstruction.reg1, result);
+		setFlags(((result==0) ? 1 : 0), 1, (((x & 0xF) < (y & 0xF)) ? 1 : 0), ((x < y) ? 1 : 0));		
 		PC = PC + currentInstruction.length;
 	};
 	
 	private void execute_IN_SBC() {
 		x=0;y=0;flag=0;result=0;
+		x = fetchRegisterData(currentInstruction.reg1);
 		switch(currentInstruction.mode) {
 			case AM_R_R:
-				x = fetchRegisterData(currentInstruction.reg1);
 				y = fetchRegisterData(currentInstruction.reg2);
-				result = (x - y - ((F & 0x10) >> 4)) & 0xFF;
-				updateRegisterData(currentInstruction.reg1, result);
 				break;	
 			case AM_R_MR:
-				x = fetchRegisterData(currentInstruction.reg1);
 				y = read(fetchRegisterData(currentInstruction.reg2));
-				result = (x - y - ((F & 0x10) >> 4)) & 0xFF;
-				updateRegisterData(currentInstruction.reg1, result);
 				break;
 			case AM_R_D8:
-				x = fetchRegisterData(currentInstruction.reg1);
 				y = read(PC+1);
-				result = (x - y - ((F & 0x10) >> 4)) & 0xFF;
-				updateRegisterData(currentInstruction.reg1, result);
 				break;
 			default:
 				System.err.println("\tSBC INVALID ADDRESS MODE");
 				System.exit(1);
 		}
+		result = (x - y - ((F & 0x10) >> 4)) & 0xFF;
+		updateRegisterData(currentInstruction.reg1, result);
 		setFlags(((result==0) ? 1 : 0), 1, (( ((x & 0xF) - (y & 0xF) - ((F & 0x10) >> 4)) < 0) ? 1 : 0), (( (x - y - ((F & 0x10) >> 4)) < 0) ? 1 : 0));
-		
-		
 		PC = PC + currentInstruction.length;
 	};
 	
@@ -1654,63 +1540,38 @@ public class CPU {
 		int hi=0,lo=0,result=0;
 		int a=0,b=0,flag=0;
 		switch(currentInstruction.type) {
-			case IN_SWAP:
-				execute_IN_SWAP();
-				break;
-			case IN_RES:
-				execute_IN_RES();
-				break;
-			case IN_SET:
-				execute_IN_SET();
-				break;
-			case IN_SRL:
-				execute_IN_SRL();
-				break;
-			case IN_RR:
-				execute_IN_RR();
-				break;
-			case IN_RL:
-				execute_IN_RL();
-				break;
-			case IN_RLC:
-				execute_IN_RLC();
-				break;
-			case IN_RRC:
-				execute_IN_RRC();
-				break;
-			case IN_SLA:
-				execute_IN_SLA();
-				break;
-			case IN_SRA:
-				execute_IN_SRA();
-				break;
-			case IN_BIT:
-				execute_IN_BIT();
-				break;
+			case IN_SWAP:execute_IN_SWAP();break;
+			case IN_RES:execute_IN_RES();break;
+			case IN_SET:execute_IN_SET();break;
+			case IN_SRL:execute_IN_SRL();break;
+			case IN_RR:execute_IN_RR();break;
+			case IN_RL:execute_IN_RL();break;
+			case IN_RLC:execute_IN_RLC();break;
+			case IN_RRC:execute_IN_RRC();break;
+			case IN_SLA:execute_IN_SLA();break;
+			case IN_SRA:execute_IN_SRA();break;
+			case IN_BIT:execute_IN_BIT();break;
 			case IN_NONE:
 				System.err.print("CB Instruction not implemented");
 				System.exit(2);
-				break;
 			default:
 				System.err.print("CB Instruction invalid");
 				System.exit(2);
-				break;
 		}
 	}
 	
 	private void execute_IN_SWAP() {
-		x=0;y=0;result=0;flag=0;		
+		x=0;y=0;result=0;flag=0;
+		x = fetchRegisterData(currentInstruction.reg1);
 		//swaps upper 4 bits to lower
 		switch(currentInstruction.mode) {
 			case AM_R:
-				x = fetchRegisterData(currentInstruction.reg1);
 				y = (x & 0xF0) >> 4; //hi
 				x = x & 0xF; //lo
 				result = ((x << 4) | y) & 0xFF;
 				updateRegisterData(currentInstruction.reg1,result);
 				break;
-			case AM_MR:
-				x = fetchRegisterData(currentInstruction.reg1);
+			case AM_MR:				
 				y = read(x);
 				x = y & 0xF; //lo
 				y = (y & 0xF0) >> 4; //hi				
@@ -1720,26 +1581,23 @@ public class CPU {
 			default:
 				System.err.println("\tSWAP INVALID ADDRESS MODE");
 				System.exit(1);
-		}
-				
-		setFlags(((result == 0) ? 1 : 0), 0, 0, 0);
-		
+		}				
+		setFlags(((result == 0) ? 1 : 0), 0, 0, 0);		
 		PC = PC + currentInstruction.length;
 	};
 	
 	private void execute_IN_RES() {
-		x=0;y=0;result=0;flag=0;		
+		x=0;y=0;result=0;flag=0;
+		x = fetchRegisterData(currentInstruction.reg1);
 		//reset specified bit to 0
 		switch(currentInstruction.mode) {
 			case AM_R:
-				x = currentInstruction.param;
-				y = fetchRegisterData(currentInstruction.reg1);
-				x = (~(1 << x)) & 0xFF;
+				y = currentInstruction.param;
+				y = (~(1 << y)) & 0xFF;
 				result = (x & y) & 0xFF;
 				updateRegisterData(currentInstruction.reg1,result);
 				break;
-			case AM_MR:
-				x = fetchRegisterData(currentInstruction.reg1);
+			case AM_MR:				
 				y = read(x);
 				result = (((~(1 << currentInstruction.param)) & 0xFF) & y) & 0xFF;				
 				write(x,result);
@@ -1747,24 +1605,22 @@ public class CPU {
 			default:
 				System.err.println("\tRES INVALID ADDRESS MODE");
 				System.exit(1);
-		}
-		
+		}		
 		PC = PC + currentInstruction.length;
 	};
 	
 	private void execute_IN_SET() {
-		x=0;y=0;result=0;flag=0;		
+		x=0;y=0;result=0;flag=0;
+		x = fetchRegisterData(currentInstruction.reg1);
 		//set specified bit to 1
 		switch(currentInstruction.mode) {
 			case AM_R:
-				x = currentInstruction.param;
-				y = fetchRegisterData(currentInstruction.reg1);
-				x = (1 << x) & 0xFF;
+				y = currentInstruction.param;
+				y = (1 << y) & 0xFF;
 				result = (x | y) & 0xFF;
 				updateRegisterData(currentInstruction.reg1,result);
 				break;
 			case AM_MR:
-				x = fetchRegisterData(currentInstruction.reg1);
 				y = read(x);
 				result = (((1 << currentInstruction.param) & 0xFF) | y) & 0xFF;				
 				write(x,result);
@@ -1772,22 +1628,20 @@ public class CPU {
 			default:
 				System.err.println("\tSET INVALID ADDRESS MODE");
 				System.exit(1);
-		}
-		
+		}		
 		PC = PC + currentInstruction.length;
 	};
 	
 	private void execute_IN_SRL() {
 		x=0;y=0;result=0;flag=0;
+		x = fetchRegisterData(currentInstruction.reg1);
 		switch(currentInstruction.mode) {
-			case AM_R:
-				x = fetchRegisterData(currentInstruction.reg1);
+			case AM_R:				
 				result = (x >> 1) & 0xFF;
 				updateRegisterData(currentInstruction.reg1, result);
 				setFlags(((result == 0) ? 1 : 0), 0, 0, (x & 0x1));
 				break;
 			case AM_MR:
-				x = fetchRegisterData(currentInstruction.reg1);
 				y = read(x);
 				result = (y >> 1) & 0xFF;				
 				write(x,result);
@@ -1796,22 +1650,20 @@ public class CPU {
 			default:
 				System.err.println("\tSRL INVALID ADDRESS MODE");
 				System.exit(1);
-		}
-		
+		}		
 		PC = PC + currentInstruction.length;
 	};
 	
 	private void execute_IN_RR() {
 		x=0;y=0;result=0;flag=0;
+		x = fetchRegisterData(currentInstruction.reg1);
 		switch(currentInstruction.mode) {
 			case AM_R:
-				x = fetchRegisterData(currentInstruction.reg1);
 				result = ((x >> 1) | ((F << 3) & 0x80)) & 0xFF;
 				updateRegisterData(currentInstruction.reg1,result);
 				setFlags(((result == 0) ? 1 : 0), 0, 0, (x & 0x1));
 				break;
-			case AM_MR:
-				x = fetchRegisterData(currentInstruction.reg1);
+			case AM_MR:				
 				y = read(x);
 				result = ((y >> 1) | ((F << 3) & 0x80)) & 0xFF;
 				write(x,result);
@@ -1820,22 +1672,20 @@ public class CPU {
 			default:
 				System.err.println("\tRR INVALID ADDRESS MODE");
 				System.exit(1);
-		}
-		
+		}		
 		PC = PC + currentInstruction.length;
 	};
 	
 	private void execute_IN_RL() {
 		x=0;y=0;result=0;flag=0;
+		x = fetchRegisterData(currentInstruction.reg1);
 		switch(currentInstruction.mode) {
 			case AM_R:
-				x = fetchRegisterData(currentInstruction.reg1);
 				result = ((x << 1) | ((F >> 4) & 0x1)) & 0xFF;
 				updateRegisterData(currentInstruction.reg1,result);
 				setFlags(((result == 0) ? 1 : 0), 0, 0, ((x & 0x80) >> 7));
 				break;
-			case AM_MR:
-				x = fetchRegisterData(currentInstruction.reg1);
+			case AM_MR:				
 				y = read(x);
 				result = ((y << 1) | ((F >> 4) & 0x1)) & 0xFF;
 				write(x,result);
@@ -1844,120 +1694,114 @@ public class CPU {
 			default:
 				System.err.println("\tRR INVALID ADDRESS MODE");
 				System.exit(1);
-		}
-		
+		}		
 		PC = PC + currentInstruction.length;
 	};
 	
 	private void execute_IN_RLC() {
 		x=0;y=0;result=0;flag=0;
+		x = fetchRegisterData(currentInstruction.reg1);
 		switch(currentInstruction.mode) {
 			case AM_R:
-				x = fetchRegisterData(currentInstruction.reg1);
 				result = ((x << 1) | ((x & 0x80) >> 7)) & 0xFF;	
 				updateRegisterData(currentInstruction.reg1,result);
 				setFlags(((result == 0) ? 1 : 0), 0, 0, ((x & 0x80) >> 7));
 				break;
-			case AM_MR:
-				x = fetchRegisterData(currentInstruction.reg1);
+			case AM_MR:;
 				y = read(x);
 				result = ((y << 1) | ((y & 0x80) >> 7)) & 0xFF;
 				write(x,result);
 				setFlags(((result == 0) ? 1 : 0), 0, 0, ((y & 0x80) >> 7));
 				break;
 			default:
-				break;
+				System.err.println("\tRLC INVALID ADDRESS MODE");
+				System.exit(1);
 		}
 		PC = PC + currentInstruction.length;
 	};
 	
 	private void execute_IN_RRC() {
 		x=0;y=0;result=0;flag=0;
+		x = fetchRegisterData(currentInstruction.reg1);
 		switch(currentInstruction.mode) {
 			case AM_R:
-				x = fetchRegisterData(currentInstruction.reg1);
 				result = ((x >> 1) | ((x & 0x1) << 7)) & 0xFF;	
 				updateRegisterData(currentInstruction.reg1,result);
 				setFlags(((result == 0) ? 1 : 0), 0, 0, (x & 0x1));
 				break;
 			case AM_MR:
-				x = fetchRegisterData(currentInstruction.reg1);
 				y = read(x);
 				result = ((y >> 1) | ((y & 0x1) << 7)) & 0xFF;
 				write(x,result);
 				setFlags(((result == 0) ? 1 : 0), 0, 0, (y & 0x1));
 				break;
 			default:
-				break;
+				System.err.println("\tRRC INVALID ADDRESS MODE");
+				System.exit(1);
 		}
 		PC = PC + currentInstruction.length;
 	};
 	
 	private void execute_IN_SLA() {
 		x=0;y=0;result=0;flag=0;
+		x = fetchRegisterData(currentInstruction.reg1);
 		switch(currentInstruction.mode) {
 			case AM_R:
-				x = fetchRegisterData(currentInstruction.reg1);
 				result = (x << 1) & 0xFF;
 				updateRegisterData(currentInstruction.reg1,result);
 				setFlags(((result == 0) ? 1 : 0), 0, 0, ((x & 0x80) >> 7));
 				break;
-			case AM_MR:
-				x = fetchRegisterData(currentInstruction.reg1);
+			case AM_MR:				
 				y = read(x);
 				result = (y << 1) & 0xFF;
 				write(x,result);
 				setFlags(((result == 0) ? 1 : 0), 0, 0, ((y & 0x80) >> 7));
 				break;
 			default:
-				break;
+				System.err.println("\tSLA INVALID ADDRESS MODE");
+				System.exit(1);
 		}
 		PC = PC + currentInstruction.length;
 	};
 	
 	private void execute_IN_SRA() {
 		x=0;y=0;result=0;flag=0;
+		x = fetchRegisterData(currentInstruction.reg1);
 		switch(currentInstruction.mode) {
-			case AM_R:
-				x = fetchRegisterData(currentInstruction.reg1);
+			case AM_R:				
 				result = ((x & 0x80) | (x >> 1)) & 0xFF;
 				updateRegisterData(currentInstruction.reg1,result);
 				setFlags(((result == 0) ? 1 : 0), 0, 0, (x & 0x1));
 				break;
 			case AM_MR:
-				x = fetchRegisterData(currentInstruction.reg1);
 				y = read(x);
 				result = ((y & 0x80) | (y >> 1)) & 0xFF;
 				write(x,result);
 				setFlags(((result == 0) ? 1 : 0), 0, 0, (y & 0x1));
 				break;
 			default:
-				break;
+				System.err.println("\tSRA INVALID ADDRESS MODE");
+				System.exit(1);
 		}
 		PC = PC + currentInstruction.length;
 	};
 	
 	private void execute_IN_BIT() {
 		x=0;y=0;result=0;flag=0;
+		x = fetchRegisterData(currentInstruction.reg1);
 		switch(currentInstruction.mode) {
 			case AM_R:
-				x = fetchRegisterData(currentInstruction.reg1);
 				result = ~((x >> currentInstruction.param) & 0x1);
-				setFlags(result, 0, 1, ((F & 0x10) >> 4));
 				break;
 			case AM_MR:
-				x = fetchRegisterData(currentInstruction.reg1);
 				y = read(x);
-				result = ~((y >> currentInstruction.param) & 0x1);
-				setFlags(result, 0, 1, ((F & 0x10) >> 4));
+				result = ~((y >> currentInstruction.param) & 0x1);				
 				break;
 			default:
-				break;
+				System.err.println("\tBIT INVALID ADDRESS MODE");
+				System.exit(1);
 		}
+		setFlags(result, 0, 1, ((F & 0x10) >> 4));
 		PC = PC + currentInstruction.length;
 	};
-}
-
-interface InstructionExecutor {
-	public void execute();
 }
