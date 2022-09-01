@@ -154,4 +154,8 @@ public class Bus {
 			}
 		}
 	}
+	
+	public void tick() {
+		timer.tick();
+	}
 }

@@ -7,43 +7,35 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileSystemView;
 
-import com.vzl.Bus;
-import com.vzl.CPU;
-import com.vzl.Cartridge;
+import com.vzl.Emulator;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame {
-	CPU cpu;
-	Bus bus;
-	Cartridge cart;
+	private Screen screen;
+	private MenuBar menuBar;
 	
-	Screen screen;
-	MenuBar menuBar;
+	private Emulator emu = new Emulator();
 	
-	public Window(CPU cpu, Bus bus) {
-		this.cpu = cpu;
-		this.bus = bus;
-		
+	public Window() {
 		screen = new Screen();
 		menuBar = new MenuBar();
 		
-		menuBar.open.addActionListener(new ActionListener() {
+		menuBar.getMenu(0).getItem(0).addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 				int result = fileChooser.showOpenDialog(null);
 				if (result == JFileChooser.APPROVE_OPTION) {
 					System.out.println("Selected file: " + fileChooser.getSelectedFile().getAbsolutePath());
-					cart = new Cartridge();
-					cart.loadCart(fileChooser.getSelectedFile().getAbsoluteFile());
-					bus.connect(cart);
+					emu.insertCartridge(fileChooser.getSelectedFile().getAbsoluteFile());
+					emu.start();
 				} else {
 					System.out.println("File selection cancelled");
 				}
 			}			
 		});
 		
-		menuBar.exit.addActionListener(new ActionListener() {
+		menuBar.getMenu(0).getItem(1).addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);				
