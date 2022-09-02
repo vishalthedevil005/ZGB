@@ -1,6 +1,7 @@
 package com.vzl;
 
 public class PPU {
+	private InterruptController ic;
 	private int[] VRAM = new int[8 * 1024];
 	private int[] OAM = new int[4 * 40];
 	
@@ -16,6 +17,10 @@ public class PPU {
 	private int OBP1;
 	private int WY;
 	private int WX;
+	
+	public PPU(InterruptController ic) {
+		this.ic = ic;
+	}
 	
 	public int read(int addr) {			
 		if(addr >= 0x8000 && addr <= 0x9FFF) return VRAM[addr - 0x8000];

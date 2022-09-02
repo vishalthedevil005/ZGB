@@ -1,6 +1,10 @@
 package com.vzl;
 
+import com.vzl.InterruptController.InterruptType;
+
 public class Timer {
+	private InterruptController ic;
+	
 	private int DIV;
 	private int TIMA;
 	private int TMA;
@@ -14,7 +18,10 @@ public class Timer {
 	boolean timaOverflow = false;
 	int wait = 0;
 	
-	boolean requestTimerInterrupt = false;
+	public Timer(InterruptController ic) {
+		this.ic = ic;
+	}
+	
 	public int read(int addr) {
 		if(addr == 0xFF04) return DIV/256;
 		if(addr == 0xFF05) return TIMA;
@@ -69,7 +76,7 @@ public class Timer {
 			wait++;
 			if(wait == 4) {
 				//timer interrupt
-				requestTimerInterrupt = true;
+				ic.requestInterrupt(InterruptType.TIMER);
 			}
 			if(wait == 5) {
 				TIMA = TMA;				

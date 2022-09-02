@@ -6,16 +6,14 @@ public class Bus {
 	private PPU ppu;
 	private Memory memory;
 	private Timer timer;
+	private InterruptController ic;
 	
 	private int[] ioReg;
 	private int[] hram;
-	private int IE;
-	private int IF;
 
 	public Bus() {
 		ioReg = new int[128];
 		hram = new int[127];
-		IE = 0;
 	}
 	
 	public void connectCPU(CPU cpu) {
@@ -32,6 +30,10 @@ public class Bus {
 	
 	public void connect(Memory memory) {
 		this.memory = memory;
+	}
+	
+	public void connect(InterruptController ic) {
+		this.ic = ic;
 	}
 	
 	public void connect(Timer timer) {
@@ -72,7 +74,7 @@ public class Bus {
 				}
 				
 				if(addr==0xFF0F) {
-					return IF;
+					return ic.read(addr);
 				}
 				
 				if(addr >= 0xFF40 && addr <= 0xFF4B) {
@@ -86,7 +88,7 @@ public class Bus {
 			}
 			
 			if(addr==0xFFFF) {
-				return IE;
+				return ic.read(addr);
 			}
 		}
 			
@@ -132,7 +134,7 @@ public class Bus {
 				}
 				 
 				if(addr==0xFF0F) {
-					IF = data;
+					ic.write(addr,data);
 					return;
 				}
 				
@@ -149,13 +151,9 @@ public class Bus {
 			}
 			
 			if(addr==0xFFFF) {
-				IE = data;
+				ic.write(addr,data);
 				return;
 			}
 		}
-	}
-	
-	public void tick() {
-		timer.tick();
 	}
 }

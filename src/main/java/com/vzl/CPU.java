@@ -590,6 +590,16 @@ public class CPU {
 		}
 	};
 	
+	enum State {
+		RUNNING, HALT, STOP
+	}
+	private State currentState = State.RUNNING;
+	private InterruptController ic;
+	
+	public CPU(InterruptController ic) {
+		this.ic = ic;
+	}
+	
 	//Registers
 	private int A = 0x01;
 	private int B = 0x00;
@@ -645,15 +655,12 @@ public class CPU {
 	private Instruction currentInstruction;
 	
 	private boolean IME;
-	private boolean enableIME;	
-	private boolean halted;
+	private boolean enableIME;
 	
 	private Bus bus;
-	private Timer timer = new Timer();
 	
 	void connectBus(Bus b) {
 		this.bus = b;
-		bus.connect(timer);
 	}
 	
 	public int read(int addr) {
@@ -675,32 +682,22 @@ public class CPU {
 		return String.format("[Z: %X, N: %X, H: %X, C: %X]", ((F & 0x80) >> 7), ((F & 0x40) >> 6), ((F & 0x20) >> 5), ((F & 0x10) >> 4));
 	}
 	
-	void run() {
-		if(!halted) {
+	int run() {
+		if(!(currentState == State.HALT)) {
 			cycles = 0;
 			fetch();
 			if(enableIME) {
 				IME = true;
 				enableIME = false;
 			}
-			execute();
-			for(int k = 0; k < (cycles * 4); k++) {
-				//update timers for each tick
-				timer.tick();
-				if(timer.requestTimerInterrupt) {
-					bus.write(0xFF0F, (bus.read(0xFF0F) | 0x4));
-					timer.requestTimerInterrupt = false;
-				}
-			}
+			execute();		
+			return cycles;
 		} else {
-			timer.tick();
-			if(timer.requestTimerInterrupt) {
-				bus.write(0xFF0F, (bus.read(0xFF0F) | 0x4));
-				timer.requestTimerInterrupt = false;
-				halted = false;
-			}			
-		}
-		handleInterrupts();
+			if(ic.pending()) {
+				currentState = State.RUNNING;
+			}
+			return 0;
+		}		
 	}
 	
 	void handleInterrupts() {
@@ -1516,11 +1513,12 @@ public class CPU {
 	};
 	
 	private void execute_IN_HALT() {
-		halted = true;
+		currentState = State.HALT;
 		PC = PC + currentInstruction.length;
 	}
 	
 	private void execute_IN_STOP() {
+		currentState = State.STOP;
 		PC = PC + currentInstruction.length + 1;//skips next PC
 	}
 	

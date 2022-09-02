@@ -6,21 +6,28 @@ public class Emulator {
 	private CPU cpu;
 	private Bus bus;
 	private PPU ppu;
-	private Memory mem = new Memory();
+	private Memory mem;
 	private Cartridge cart;
+	private InterruptController ic;
+	private Timer timer;
 	
 	private Thread cpuThread;
 	
 	public Emulator() {
-		cpu = new CPU();
 		bus = new Bus();
-		PPU ppu = new PPU();
+		ic = new InterruptController();
+		cpu = new CPU(ic);		
+		PPU ppu = new PPU(ic);
+		mem = new Memory();		
+		timer = new Timer(ic);
 		
 		cpu.connectBus(bus);
 		bus.connectCPU(cpu);
 		
+		bus.connect(ic);
 		bus.connect(ppu);
 		bus.connect(mem);
+		bus.connect(timer);
 	}
 	
 	public void insertCartridge(File f) {
@@ -30,11 +37,21 @@ public class Emulator {
 	}
 	
 	public void start() {
-		Thread cpuThread = new Thread() {
+		cpuThread = new Thread() {
 			@Override
 			public void run() {
+				int cycles = 0;
 				while(!interrupted()) {
-					cpu.run();
+					cycles = cpu.run();
+					if(cycles > 0) {						
+						for(int i = 0; i < (cycles * 4); i++) {
+							timer.tick();
+						}
+						cycles = 0;
+					} else {
+						timer.tick();
+					}					
+					cpu.handleInterrupts();
 				}
 			}
 		};
