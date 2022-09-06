@@ -3,6 +3,7 @@ package com.vzl;
 import java.io.File;
 
 public class Emulator {
+	private LCDController lcd;
 	private CPU cpu;
 	private Bus bus;
 	private PPU ppu;
@@ -13,19 +14,22 @@ public class Emulator {
 	
 	private Thread cpuThread;
 	
-	public Emulator() {
+	public Emulator(LCDController lcd) {
+		this.lcd = lcd;
 		bus = new Bus();
 		ic = new InterruptController();
 		cpu = new CPU(ic);		
-		PPU ppu = new PPU(ic);
-		mem = new Memory();		
+		ppu = new PPU(ic,lcd);
+		mem = new Memory();
 		timer = new Timer(ic);
 		
 		cpu.connectBus(bus);
 		bus.connectCPU(cpu);
 		
-		bus.connect(ic);
+		ppu.connectBus(bus);
 		bus.connect(ppu);
+		
+		bus.connect(ic);		
 		bus.connect(mem);
 		bus.connect(timer);
 	}
@@ -44,8 +48,11 @@ public class Emulator {
 				while(!interrupted()) {
 					cycles = cpu.run();
 					if(cycles > 0) {						
-						for(int i = 0; i < (cycles * 4); i++) {
-							timer.tick();
+						for(int i = 0; i < cycles; i++) {
+							for(int j = 0; j < 4; j++) {
+								timer.tick();
+								ppu.tick();
+							}
 						}
 						cycles = 0;
 					} else {

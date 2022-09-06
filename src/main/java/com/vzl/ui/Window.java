@@ -8,17 +8,22 @@ import javax.swing.JFrame;
 import javax.swing.filechooser.FileSystemView;
 
 import com.vzl.Emulator;
+import com.vzl.LCDController;
 
 @SuppressWarnings("serial")
 public class Window extends JFrame {
+	private LCDController lcd;
 	private Screen screen;
 	private MenuBar menuBar;
 	
-	private Emulator emu = new Emulator();
+	private Emulator emu;
 	
 	public Window() {
 		screen = new Screen();
 		menuBar = new MenuBar();
+		lcd = new LCDController(screen);
+		emu = new Emulator(lcd);
+		
 		
 		menuBar.getMenu(0).getItem(0).addActionListener(new ActionListener() {
 			@Override
