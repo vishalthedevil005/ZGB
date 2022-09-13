@@ -9,6 +9,9 @@ public class MenuBar extends JMenuBar {
 	private JMenu file;
 	private JMenuItem open;
 	private JMenuItem exit;
+	
+	private JMenu options;
+	private JMenuItem vramViewer;
 
 	public MenuBar() {
 		file = new JMenu("File");
@@ -18,7 +21,13 @@ public class MenuBar extends JMenuBar {
 
 		file.add(open);
 		file.add(exit);
-
+		
+		options = new JMenu("Options");
+		
+		vramViewer = new JMenuItem("VRAM Viewer");
+		options.add(vramViewer);
+		
 		this.add(file);
+		this.add(options);
 	}
 }

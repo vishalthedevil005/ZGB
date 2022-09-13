@@ -69,6 +69,11 @@ public class Bus {
 			//FEA0-FEFF	Not Usable
 			
 			if(addr>=0xFF00 && addr<=0xFF7F) {
+				if(addr == 0xFF00) {
+					//Joypad
+					return 0x0F;
+				}
+				
 				if(addr >= 0xFF04 && addr <= 0xFF07) {
 					return timer.read(addr);					
 				}
@@ -123,10 +128,10 @@ public class Bus {
 			//FEA0-FEFF	Not Usable
 			
 			if(addr>=0xFF00 && addr<=0xFF7F) {
-				if(addr == 0xFF01) {
-					System.out.print((char) data);
-					return;
-				}
+//				if(addr == 0xFF01) {
+//					System.out.print((char) data);
+//					return;
+//				}
 				
 				if(addr >= 0xFF04 && addr <= 0xFF07) {
 					timer.write(addr,data);

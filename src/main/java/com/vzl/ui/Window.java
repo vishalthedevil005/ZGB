@@ -15,15 +15,17 @@ public class Window extends JFrame {
 	private LCDController lcd;
 	private Screen screen;
 	private MenuBar menuBar;
+	private VRAMViewer vramViewer;
+	private VRAMViewerScreen vramViewerScreen;
 	
 	private Emulator emu;
 	
 	public Window() {
 		screen = new Screen();
+		//vramViewerScreen = new VRAMViewerScreen();
 		menuBar = new MenuBar();
 		lcd = new LCDController(screen);
 		emu = new Emulator(lcd);
-		
 		
 		menuBar.getMenu(0).getItem(0).addActionListener(new ActionListener() {
 			@Override
@@ -47,6 +49,16 @@ public class Window extends JFrame {
 			}			
 		});
 		
+		menuBar.getMenu(1).getItem(0).addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				vramViewerScreen = new VRAMViewerScreen();
+				vramViewer = new VRAMViewer(vramViewerScreen);
+				lcd.enableVRAMViewer(vramViewerScreen);
+			}			
+		});
+		
+		this.setTitle("ZGB");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.add(screen);
 		this.setJMenuBar(menuBar);

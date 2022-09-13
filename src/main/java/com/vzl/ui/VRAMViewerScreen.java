@@ -9,14 +9,12 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
-public class Screen extends JPanel {
-	private final static int WIDTH = 160;
-	private final static int HEIGHT = 144;
-	private final static int SCALE = 3;
+public class VRAMViewerScreen extends JPanel {
+	private static final int WIDTH = 16 * 8;
+	private static final int HEIGHT = 24 * 8;
+	private static final int SCALE = 3;
 	
-	private Graphics g;
 	private int[][] data = new int[HEIGHT][WIDTH];
-	
 	private static final Map<Integer, Color> COLOR_PALETTE_MAP = new HashMap<Integer, Color>();
 	static {
 		COLOR_PALETTE_MAP.put(3, Color.black);
@@ -24,8 +22,10 @@ public class Screen extends JPanel {
 		COLOR_PALETTE_MAP.put(1, Color.lightGray);
 		COLOR_PALETTE_MAP.put(0, Color.white);
 	};
+	
+	private Graphics g;
 
-	Screen() {
+	VRAMViewerScreen() {
 		this.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
 		this.setBackground(Color.black);
 		showScreen();
@@ -46,19 +46,29 @@ public class Screen extends JPanel {
 	
 	private void paintFullScreen() {
         for (int y = 0; y < HEIGHT; y++) {
+//        	if((y % 8) == 0) {
+//        		drawHGridLine(0, y);
+//        	}
             for (int x = 0; x < WIDTH; x++) {
+//            	if((y == 0) && ((x % 8) == 0)) {
+//            		drawVGridLine(x, 0);
+//            	}
                 paintPixel(data[y][x], x, y);
             }
         }
     }
 	
+	void drawHGridLine(int x, int y) {
+		g.drawLine(x * SCALE, y * SCALE, WIDTH * SCALE, y * SCALE);
+	}
+	
+	void drawVGridLine(int x, int y) {
+		g.drawLine(x * SCALE, y * SCALE, x * SCALE, HEIGHT * SCALE);
+	}
+	
 	public void paintPixel(int color, int x, int y) {
 		g.setColor(COLOR_PALETTE_MAP.get(color));
 		g.fillRect(x * SCALE, y * SCALE, SCALE, SCALE);
-	}
-	
-	public void updatePixel(int x, int y, int color) {
-		data[y][x] = color;
 	}
 
 	@Override
