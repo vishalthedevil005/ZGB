@@ -1,13 +1,11 @@
 package com.vzl;
 
+import com.vzl.Registers.RegisterType;
+
 public class Instruction {
 	enum AddressMode {
 		AM_IMP, AM_R_D16, AM_R_R, AM_MR_R, AM_R, AM_R_D8, AM_R_MR, AM_R_HLI, AM_R_HLD, AM_HLI_R, AM_HLD_R, AM_R_A8,
 		AM_A8_R, AM_HL_SP, AM_D16, AM_D8, AM_D16_R, AM_MR_D8, AM_MR, AM_A16_R, AM_R_A16
-	};
-
-	enum RegisterType {
-		RT_NONE, RT_A, RT_F, RT_B, RT_C, RT_D, RT_E, RT_H, RT_L, RT_AF, RT_BC, RT_DE, RT_HL, RT_SP, RT_PC
 	};
 
 	enum InstrType {
