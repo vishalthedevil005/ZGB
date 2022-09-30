@@ -261,6 +261,11 @@ public class Cartridge {
 		if(noOfRAMBanks > 0) {
 			ramBank =  new int[noOfRAMBanks][8 * 1024]; 	//switchable
 		}
+		
+		if((noOfRAMBanks == 0) && ((ch.cartridgeType == 0x02) || (ch.cartridgeType == 0x03) )) {
+			noOfRAMBanks = 1;
+			ramBank =  new int[noOfRAMBanks][8 * 1024];
+		}
 	}
 	
 	public void switchROMBank(int bankNum) {
