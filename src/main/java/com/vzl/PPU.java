@@ -70,7 +70,6 @@ public class PPU {
 	private int SCX = 0;
 	private int LY = 0;
 	private int LYC = 0;
-	private int DMA;
 	private int BGP = 0xFC;
 	private int OBP0 = 0xFF;
 	private int OBP1 = 0xFF;
@@ -106,7 +105,6 @@ public class PPU {
 		if(addr == 0xFF43) return SCX;
 		if(addr == 0xFF44) return LY;
 		if(addr == 0xFF45) return LYC;
-		if(addr == 0xFF46) return DMA;
 		if(addr == 0xFF47) return BGP;
 		if(addr == 0xFF48) return OBP0;
 		if(addr == 0xFF49) return OBP1;		
@@ -154,12 +152,6 @@ public class PPU {
 			LYC = data;
 			return;
 		}
-		if(addr == 0xFF46) {
-			enableDMA = true;
-			dmaAddr = (data << 4) & 0xFF00;
-			DMA = data;
-			return;
-		}
 		if(addr == 0xFF47) {
 			BGP = data;
 			return;
@@ -199,10 +191,6 @@ public class PPU {
 			case DRAW_PIXEL:
 				drawPixel();
 				break;
-		}
-		
-		if(enableDMA) {
-			OAMDMATransfer();
 		}
 
 		//Ticks per frame
@@ -376,22 +364,5 @@ public class PPU {
 			}
 			ticks = 0;
 		}
-	}
-	
-	private boolean enableDMA = false;
-	private int dmaAddr = 0, oamIndex = 0;
-	private void OAMDMATransfer() {
-		OAM[oamIndex] = bus.read(dmaAddr);
-		dmaAddr++;
-		oamIndex++;
-		if((dmaAddr & 0xFF) > 0x9F) {
-			enableDMA = false;
-			oamIndex = 0;
-			dmaAddr = 0;
-		}
-	}
-	
-	public boolean isDMAEnabled() {
-		return enableDMA;
 	}
 }

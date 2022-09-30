@@ -11,6 +11,7 @@ public class Emulator {
 	private Cartridge cart;
 	private InterruptController ic;
 	private Timer timer;
+	private DMA dma;
 	
 	private Thread cpuThread;
 	
@@ -22,6 +23,7 @@ public class Emulator {
 		ppu = new PPU(ic,lcd);
 		mem = new Memory();
 		timer = new Timer(ic);
+		dma = new DMA();
 		
 		cpu.connectBus(bus);
 		bus.connectCPU(cpu);
@@ -32,6 +34,8 @@ public class Emulator {
 		bus.connect(ic);		
 		bus.connect(mem);
 		bus.connect(timer);
+		
+		dma.connectBus(bus);
 	}
 	
 	public void insertCartridge(File f) {
@@ -52,6 +56,7 @@ public class Emulator {
 							for(int j = 0; j < 4; j++) {
 								timer.tick();
 								ppu.tick();
+								dma.tick();
 							}
 						}
 						cycles = 0;

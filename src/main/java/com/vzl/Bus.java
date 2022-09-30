@@ -7,6 +7,7 @@ public class Bus {
 	private Memory memory;
 	private Timer timer;
 	private InterruptController ic;
+	private DMA dma;
 	
 	private int[] ioReg;
 	private int[] hram;
@@ -83,6 +84,9 @@ public class Bus {
 				}
 				
 				if(addr >= 0xFF40 && addr <= 0xFF4B) {
+					if(addr == 0xFF46) {
+						return dma.read(addr);
+					}
 					return ppu.read(addr);
 				}
 				return ioReg[addr - 0xFF00];
@@ -121,6 +125,10 @@ public class Bus {
 			}
 			
 			if(addr>=0xFE00 && addr<=0xFE9F) {
+				if(addr == 0xFF46) {
+					dma.write(addr, data);
+					return;
+				}
 				ppu.write(addr,data);
 				return;
 			}
